@@ -44,7 +44,7 @@ let authorAttribute: Template.Attribute = .optional("author", default: .string(d
 
 let companyAttribute: Template.Attribute = .optional("company", default: .string(""))
 
-let template = Template(
+let appTemplate = Template(
     description: "New App template",
     attributes: [
         nameAttribute,
