@@ -4,7 +4,7 @@ import ProjectDescription
 /// # Usage
 ///
 /// In root of the app, run:
-/// `tuist scaffold NewApp --name MyApp`
+/// `tuist scaffold app --name MyApp`
 ///
 /// This will create a new Feature project named `MyProject` under `Modules/` for platforms `macOS` by default.
 ///
@@ -53,11 +53,11 @@ let template = Template(
     items: [
         .file(
              path: "\(rootPath)/\(nameAttribute)/Sources/\(nameAttribute)App.swift",
-             templatePath: "Sources/\(nameAttribute)App.stencil"
+             templatePath: "../Sources/App.stencil"
          ),
         .file(
              path: "\(rootPath)/\(nameAttribute)/Sources/ContentView.swift",
-             templatePath: "Sources/ContentView.stencil"
+             templatePath: "../Sources/ContentView.stencil"
          )
     ]
 )
