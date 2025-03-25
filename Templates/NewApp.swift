@@ -1,6 +1,15 @@
 import Foundation
 import ProjectDescription
 
+/// # Usage
+///
+/// In root of the app, run:
+/// `tuist scaffold NewApp --name MyApp`
+///
+/// This will create a new Feature project named `MyProject` under `Modules/` for platforms `macOS` by default.
+///
+/// To specify a platform add the `--platforms` attribute as follows:
+/// `tuist scaffold feature --name NewApp --platforms iOS`
 
 let nameAttribute: Template.Attribute = .required("name")
 
