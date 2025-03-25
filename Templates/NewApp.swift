@@ -1,0 +1,68 @@
+import Foundation
+import ProjectDescription
+
+
+let nameAttribute: Template.Attribute = .required("name")
+
+let rootPath = "Apps"
+
+let defaultAuthor: String = {
+    let arguments = ["config", "user.name"]
+
+    // shell will return output with trailing \n
+    let output = executeCommand(command: "/usr/bin/git", args: arguments).trimmingCharacters(in: .whitespacesAndNewlines)
+
+    // if no git repo, we just get the system's user name
+    return output != "" ? output : NSUserName()
+}()
+
+let defaultYear: String = {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy"
+    return dateFormatter.string(from: Date())
+}()
+
+let defaultDate: String = {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "dd/MM/yyyy"
+    return dateFormatter.string(from: Date())
+}()
+
+let yearAttribute: Template.Attribute = .optional("year", default: .string(defaultYear))
+let dateAttribute: Template.Attribute = .optional("date", default: .string(defaultDate))
+
+let authorAttribute: Template.Attribute = .optional("author", default: .string(defaultAuthor))
+
+let companyAttribute: Template.Attribute = .optional("company", default: .string(""))
+
+let template = Template(
+    description: "New App template",
+    attributes: [
+        nameAttribute,
+        .optional("platform", default: "ios"),
+    ],
+    items: [
+        .file(
+             path: "\(rootPath)/\(nameAttribute)/Sources/\(nameAttribute)App.swift",
+             templatePath: "Sources/\(nameAttribute)App.stencil"
+         ),
+        .file(
+             path: "\(rootPath)/\(nameAttribute)/Sources/ContentView.swift",
+             templatePath: "Sources/ContentView.stencil"
+         )
+    ]
+)
+
+func executeCommand(command: String, args: [String]) -> String {
+    let task = Process()
+    task.launchPath = command
+    task.arguments = args
+    let pipe = Pipe()
+
+    task.standardOutput = pipe
+    task.launch()
+
+    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+    let output = String(decoding: data, as: UTF8.self)
+    return output
+}
