@@ -1,0 +1,22 @@
+//
+//  Target.stencil
+//  SwiftUITemplate
+//
+//  Created by hanrenwei on 3/25/25.
+//
+
+import ProjectDescription
+
+public enum {{ name }} {
+    public static let target = ProjectFactory.createAppProject(
+        name: "{{ name }}",
+        dependencies: [
+        ]
+    )
+
+    public static let testTarget = ProjectFactory.createAppTestTarget(
+        name: "{{ name }}",
+        dependencies: [
+        ]
+    )
+}

@@ -58,7 +58,11 @@ let appTemplate = Template(
         .file(
              path: "\(rootPath)/\(nameAttribute)/Sources/ContentView.swift",
              templatePath: "../Sources/ContentView.stencil"
-         )
+         ),
+        .file(
+            path: "Tuist/ProjectDescriptionHelpers/Targets/Products/\(nameAttribute).swift",
+            templatePath: "target.stencil"
+        )
     ]
 )
 
