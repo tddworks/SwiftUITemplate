@@ -7,10 +7,11 @@
 
 import ProjectDescription
 import ProjectDescriptionHelpers
+import SwiftUITemplate
 
 let project = Project(
     name: "{{ name }}",
-    organizationName: "\(organizationName)",
+    organizationName: "",
     settings: .settings(
         base: SettingsDictionary()
             .marketingVersion("1.0")

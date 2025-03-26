@@ -1,0 +1,19 @@
+//
+//  Project.stencil
+//  SwiftUITemplate
+//
+//  Created by hanrenwei on 3/25/25.
+//
+import ProjectDescription
+import ProjectDescriptionHelpers
+import SwiftUITemplate
+
+let project = ProjectFactory.createAppProject(config: DefaultAppProjectConfig(
+        name: "{{ name }}",
+        baseBundleID: "com.example.{{ name }}",
+        destinations: [.iOS],
+        versionNumber: "1.0",
+        platform: .iOS,
+        organizationName: "{{ organizationName }}",
+        devTeam: "{{TEAM_ID}}")
+)

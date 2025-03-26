@@ -13,7 +13,7 @@ import ProjectDescription
 
 let nameAttribute: Template.Attribute = .required("name")
 
-let rootPath = "Apps"
+let rootPath = "Products"
 
 let defaultAuthor: String = {
     let arguments = ["config", "user.name"]
@@ -64,7 +64,11 @@ let appTemplate = Template(
         .file(
              path: "\(rootPath)/\(nameAttribute)/Sources/ContentView.swift",
              templatePath: "../Sources/ContentView.stencil"
-         )
+         ),
+        .file(
+                path: "\(rootPath)/\(nameAttribute)/Resources/InfoPlist.strings",
+                templatePath: "InfoPlist.stencil"
+        ),
     ]
 )
 

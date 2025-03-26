@@ -31,7 +31,7 @@ public enum ProjectFactory {
         )
     }
     
-    static func createAppTestTarget(config: AppProjectConfig) -> Target {
+    public static func createAppTestTarget(config: AppProjectConfig) -> Target {
         Target.target(
             name: "\(config.name)Tests",
             destinations: config.destinations,
@@ -66,7 +66,7 @@ public enum ProjectFactory {
     
     private static func createAppTargets(
         config: AppProjectConfig,
-        dependencies: [TargetDependency]
+        dependencies: [TargetDependency] = []
     ) -> [Target] {
         [
             createAppTarget(config: config, dependencies: dependencies),
@@ -74,9 +74,9 @@ public enum ProjectFactory {
         ]
     }
     
-    private static func createAppTarget(
+    public static func createAppTarget(
         config: AppProjectConfig,
-        dependencies: [TargetDependency]
+        dependencies: [TargetDependency] = []
     ) -> Target {
         
         Target.target(

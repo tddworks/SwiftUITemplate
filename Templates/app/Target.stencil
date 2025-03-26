@@ -6,17 +6,24 @@
 //
 
 import ProjectDescription
+import SwiftUITemplate
 
 public enum {{ name }} {
-    public static let target = ProjectFactory.createAppProject(
-        name: "{{ name }}",
-        dependencies: [
-        ]
-    )
+    public static let target = ProjectFactory.createAppTarget(config: DefaultAppProjectConfig(
+                                                     name: "{{ name }}",
+                                                     baseBundleID: "com.example.{{ name }}",
+                                                     destinations: [.iPhone, .iPad],
+                                                     versionNumber: "1.0",
+                                                     organizationName: "{{ organizationName }}",
+                                                     devTeam: "{{TEAM_ID}}")
+                                             )
 
-    public static let testTarget = ProjectFactory.createAppTestTarget(
-        name: "{{ name }}",
-        dependencies: [
-        ]
-    )
+    public static let testTarget = ProjectFactory.createAppTestTarget(config: DefaultAppProjectConfig(
+                                                      name: "{{ name }}",
+                                                      baseBundleID: "com.example.{{ name }}",
+                                                      destinations: [.iPhone, .iPad],
+                                                      versionNumber: "1.0",
+                                                      organizationName: "{{ organizationName }}",
+                                                      devTeam: "{{TEAM_ID}}")
+                                               )
 }

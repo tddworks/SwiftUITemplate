@@ -16,8 +16,8 @@ public enum SourcePaths {
     }
     
     public enum Apps {
-        public static func sources(appName: String) ->  SourceFileGlob { "Apps/\(appName)/Sources/**" }
-        public static func resources(appName: String) ->  ResourceFileElement { "Apps/\(appName)/Resources/**" }
-        public static func tests(appName: String) ->  SourceFileGlob { "Apps/\(appName)/Tests/**" }
+        public static func sources(appName: String) ->  SourceFileGlob { "Products/\(appName)/Sources/**" }
+        public static func resources(appName: String) ->  ResourceFileElement { "Products/\(appName)/Resources/**" }
+        public static func tests(appName: String) ->  SourceFileGlob { "Products/\(appName)/Tests/**" }
     }
 }
