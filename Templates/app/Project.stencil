@@ -7,7 +7,6 @@
 
 import ProjectDescription
 import ProjectDescriptionHelpers
-import SwiftUITemplate
 
 let project = Project(
     name: "{{ name }}",

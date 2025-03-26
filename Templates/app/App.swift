@@ -51,6 +51,7 @@ let appTemplate = Template(
         .optional("platform", default: "ios"),
     ],
     items: [
+        .directory(path: "Tuist", sourcePath: "../../ProjectDescriptionHelpers"),
         .file(path: "./Project.swift",
               templatePath: "Project.stencil"),
         .file(
@@ -66,8 +67,8 @@ let appTemplate = Template(
              templatePath: "../Sources/ContentView.stencil"
          ),
         .file(
-                path: "\(rootPath)/\(nameAttribute)/Resources/InfoPlist.strings",
-                templatePath: "InfoPlist.stencil"
+            path: "\(rootPath)/\(nameAttribute)/Resources/InfoPlist.strings",
+            templatePath: "InfoPlist.stencil"
         ),
     ]
 )
