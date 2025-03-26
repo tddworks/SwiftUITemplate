@@ -51,6 +51,12 @@ let appTemplate = Template(
         .optional("platform", default: "ios"),
     ],
     items: [
+        .file(path: "./Project.swift",
+              templatePath: "Project.stencil"),
+        .file(
+            path: "Tuist/ProjectDescriptionHelpers/Targets/Products/\(nameAttribute).swift",
+            templatePath: "target.stencil"
+        ),
         .file(
              path: "\(rootPath)/\(nameAttribute)/Sources/\(nameAttribute)App.swift",
              templatePath: "../Sources/App.stencil"
@@ -58,11 +64,7 @@ let appTemplate = Template(
         .file(
              path: "\(rootPath)/\(nameAttribute)/Sources/ContentView.swift",
              templatePath: "../Sources/ContentView.stencil"
-         ),
-        .file(
-            path: "Tuist/ProjectDescriptionHelpers/Targets/Products/\(nameAttribute).swift",
-            templatePath: "target.stencil"
-        )
+         )
     ]
 )
 
