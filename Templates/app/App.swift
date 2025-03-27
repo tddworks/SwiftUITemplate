@@ -14,7 +14,9 @@ import ProjectDescription
 
 let nameAttribute: Template.Attribute = .required("name")
 
-let rootPath = "Products"
+let projectPath = "."
+
+let productsPath  = "Products"
 
 let defaultAuthor: String = {
     let arguments = ["config", "user.name"]
@@ -53,31 +55,35 @@ let appTemplate = Template(
     ],
     items: [
         .directory(path: "Tuist", sourcePath: "../../ProjectDescriptionHelpers"),
-        .directory(path: "\(rootPath)/\(nameAttribute)/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
+        .directory(path: "\(productsPath )/\(nameAttribute)/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
         .file(path: "./Project.swift",
               templatePath: "Project.stencil"),
+        .file(
+               path: projectPath + "/Package.swift",
+               templatePath: "Package.stencil"
+           ),
         .file(
             path: "Tuist/ProjectDescriptionHelpers/Targets/Products/\(nameAttribute).swift",
             templatePath: "target.stencil"
         ),
         .file(
-             path: "\(rootPath)/\(nameAttribute)/Sources/\(nameAttribute)App.swift",
+             path: "\(productsPath )/\(nameAttribute)/Sources/\(nameAttribute)App.swift",
              templatePath: "../Sources/App.stencil"
          ),
         .file(
-             path: "\(rootPath)/\(nameAttribute)/Sources/ContentView.swift",
+             path: "\(productsPath )/\(nameAttribute)/Sources/ContentView.swift",
              templatePath: "../Sources/ContentView.stencil"
          ),
         .file(
-            path: "\(rootPath)/\(nameAttribute)/Resources/InfoPlist.strings",
+            path: "\(productsPath )/\(nameAttribute)/Resources/InfoPlist.strings",
             templatePath: "InfoPlist.stencil"
         ),
         .file(
-             path: "\(rootPath)/\(nameAttribute)/TestsSources/\(nameAttribute)Tests.swift",
+             path: "\(productsPath )/\(nameAttribute)/TestsSources/\(nameAttribute)Tests.swift",
              templatePath: "../TestSources/Tests.stencil"
          ),
         .file(
-             path: "\(rootPath)/\(nameAttribute)/TestResources/InfoPlist.strings",
+             path: "\(productsPath )/\(nameAttribute)/TestResources/InfoPlist.strings",
              templatePath: "../Sources/ContentView.stencil"
          ),
     ]

@@ -1,0 +1,28 @@
+import PackageDescription
+
+let package = Package(
+    name: "{{ name }}",
+    products: [
+        .library(
+            name: "{{ name }}",
+            targets: [
+                "{{ name }}",
+            ]
+        ),
+    ],
+    dependencies: [
+    ],
+    targets: [
+        .target(
+            name: "{{ name }}",
+            dependencies: [
+            ]
+        ),
+        .testTarget(
+            name: "{{ name }}Tests",
+            dependencies: [
+                "{{ name }}"
+            ]
+        ),
+    ]
+)
