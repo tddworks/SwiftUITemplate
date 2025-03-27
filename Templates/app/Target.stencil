@@ -10,7 +10,7 @@ import ProjectDescription
 public enum {{ name }} {
     public static let targets = Target.createAppTargets(
         name: "{{ name }}",
-        bundleId: "com.example.{{ name }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
         destinations: .iOS,
         versionNumber: "1.0.0",
         hasResources: true,
@@ -23,7 +23,7 @@ public enum {{ name }} {
     
     public static let target = Target.createAppTarget(
         name: "{{ name }}",
-        bundleId: "com.example.{{ name }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
         destinations: .iOS,
         versionNumber: "1.0.0",
         hasResources: true,
@@ -36,7 +36,7 @@ public enum {{ name }} {
     
     public static let testTarget = Target.createAppTestTarget(
         name: "{{ name }}",
-        bundleId: "com.example.{{ name }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
         destinations: .iOS,
         hasResources: true
     )

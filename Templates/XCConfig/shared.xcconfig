@@ -1,0 +1,11 @@
+//  Created by hanrenwei on 1/22/25.
+//  Copyright © 2025 onegai.com. All rights reserved.
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+// https://nshipster.com/secrets/
+// https://github.com/depromeet/14th-team5-iOS/blob/develop/14th-team5-iOS/XCConfig/hidden.xcconfig
+// https://medium.com/@gizemturker/ensuring-security-for-secrets-in-ios-app-ff4a25c533a1
+
+PRODUCT_BUNDLE_IDENTIFIER = com.example
+DEVELOPMENT_TEAM = Y5856NSDZU

@@ -1,0 +1,6 @@
+//  Created by hanrenwei on 1/22/25.
+//  Copyright © 2025 onegai.com. All rights reserved.
+
+#include "shared.xcconfig"
+
+CODE_SIGN_IDENTITY = Apple Development

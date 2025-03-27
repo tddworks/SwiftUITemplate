@@ -1,6 +1,7 @@
 import Foundation
 import ProjectDescription
 
+
 /// # Usage
 ///
 /// In root of the app, run:
@@ -52,6 +53,7 @@ let appTemplate = Template(
     ],
     items: [
         .directory(path: "Tuist", sourcePath: "../../ProjectDescriptionHelpers"),
+        .directory(path: "\(rootPath)/\(nameAttribute)/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
         .file(path: "./Project.swift",
               templatePath: "Project.stencil"),
         .file(
@@ -67,6 +69,10 @@ let appTemplate = Template(
              templatePath: "../Sources/ContentView.stencil"
          ),
         .file(
+            path: "\(rootPath)/\(nameAttribute)/Resources/InfoPlist.strings",
+            templatePath: "InfoPlist.stencil"
+        ),
+        .file(
              path: "\(rootPath)/\(nameAttribute)/TestsSources/\(nameAttribute)Tests.swift",
              templatePath: "../TestSources/Tests.stencil"
          ),
@@ -74,10 +80,6 @@ let appTemplate = Template(
              path: "\(rootPath)/\(nameAttribute)/TestResources/InfoPlist.strings",
              templatePath: "../Sources/ContentView.stencil"
          ),
-        .file(
-            path: "\(rootPath)/\(nameAttribute)/Resources/InfoPlist.strings",
-            templatePath: "InfoPlist.stencil"
-        ),
     ]
 )
 

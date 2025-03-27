@@ -6,7 +6,7 @@
 //
 
 import ProjectDescription
-
+// https://www.adamtecle.com/blog/tuist-xcconfigs
 extension Target {
 
     public static func createAppTargets(
@@ -52,12 +52,12 @@ extension Target {
             product: .app,
             bundleId: "\(bundleId).\(name)",
             infoPlist: .extendingDefault(
-                with: baseInfoPlist(version: versionNumber).merging(additionalInfoPlist) { $1 }
+                with: baseInfoPlist(versionNumber: versionNumber).merging(additionalInfoPlist) { $1 }
             ),
             sources: [SourcePaths.Apps.sources(appName: name)],
             resources: hasResources ? [SourcePaths.Apps.resources(appName: name)] : nil,
             dependencies: dependencies,
-            settings: createSettings()
+            settings: createSettings(name: name, versionNumber: versionNumber, devTeam: "${DEVELOPMENT_TEAM}")
         )
     }
     
@@ -131,32 +131,39 @@ extension Target {
         )
     }
     
-    private static func baseInfoPlist(version: String) -> [String: ProjectDescription.Plist.Value] {
+    // https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleversion
+    // The tl;dr is that CFBudnleShortVersion is your app version, as we understand it, and CFBundleVersion is a build number for the system to differentiate builds of the same version
+    private static func baseInfoPlist(versionNumber: String) -> [String: ProjectDescription.Plist.Value] {
         return [
             "UILaunchScreen": ["UIColorName": "AccentColor"],
-            "CFBundleShortVersionString": .string(version),
-            "CFBundleVersion": "1",
             "LSApplicationCategoryType": "public.app-category.utilities",
-            "ITSAppUsesNonExemptEncryption": false
+            "ITSAppUsesNonExemptEncryption": false,
+            // The release or version number of the bundle.
+            "CFBundleShortVersionString": Plist.Value(stringLiteral: versionNumber),
+            // The version of the build that identifies an iteration of the bundle.
+            "CFBundleVersion": "1",
         ]
     }
-
-    private static func createSettings() -> Settings {
-        return .settings(
-            base: [
-                "CODE_SIGN_IDENTITY": "$(codeSignIdentity)",
-                "CODE_SIGN_STYLE": "Automatic",
-                "DEVELOPMENT_TEAM": "$(developmentTeam)",
-                "DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER": "NO",
-                "TARGETED_DEVICE_FAMILY": "1",
-            ],
-            debug: [
-                "ENABLE_DEBUG_DYLIB": true,
-            ],
-            release: [:],
-            defaultSettings: .recommended(excluding: [
-                "CODE_SIGN_IDENTITY",
-            ])
-        )
+    
+    // https://developer.apple.com/documentation/xcode/build-settings-reference#Marketing-Version
+    private static func createSettings(
+        name: String,
+        versionNumber: String,
+        devTeam: String
+    ) -> Settings {
+        let configurations: [Configuration] =  [
+            .debug(name: .debug, settings: ["OTHER_SWIFT_FLAGS": "-DDEBUG"], xcconfig: "\(SourcePaths.Apps.appResourcesPath(appName: name))/XCConfig/debug.xcconfig"),
+            .release(name: .release, xcconfig: "\(SourcePaths.Apps.appResourcesPath(appName: name))/XCConfig/release.xcconfig"),
+        ]
+        
+        let baseSettings = SettingsDictionary()
+            .codeSignIdentityAppleDevelopment()
+            .automaticCodeSigning(devTeam: devTeam)
+            //CURRENT_PROJECT_VERSION (CFBundleVersion in Info.plist):
+            .currentProjectVersion("1")
+            //MARKETING_VERSION (CFBundleShortVersionString in Info.plist)
+            .marketingVersion(versionNumber)
+        return .settings(base: baseSettings, configurations: configurations, defaultSettings: .recommended)
     }
+    
 }
