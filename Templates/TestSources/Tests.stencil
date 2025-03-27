@@ -1,0 +1,16 @@
+//
+//  Tests.stencil
+//  SwiftUITemplate
+//
+//  Created by hanrenwei on 3/25/25.
+//
+
+@testable import {{ name }}
+import Foundation
+import Testing
+
+struct {{ name }}Tests {
+   @Test("your test") {
+   
+   }
+}

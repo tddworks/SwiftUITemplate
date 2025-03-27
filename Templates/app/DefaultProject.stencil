@@ -8,7 +8,7 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 import SwiftUITemplate
 
-let project = ProjectFactory.createAppProject(config: DefaultAppProjectConfig(
+let project = Target.createAppTargets(config: DefaultAppProjectConfig(
         name: "{{ name }}",
         baseBundleID: "com.example.{{ name }}",
         destinations: [.iOS],

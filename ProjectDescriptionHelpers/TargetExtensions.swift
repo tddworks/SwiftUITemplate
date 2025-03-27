@@ -8,48 +8,78 @@
 import ProjectDescription
 
 extension Target {
-    
-    public static func appTarget(
+
+    public static func createAppTargets(
         name: String,
         bundleId: String,
-        destinations: Destinations,
-        versionNumber: String,
-        platform: Platform,
-        organizationName: String,
-        devTeam: String,
-        packages: [Package],
-        dependencies: [TargetDependency],
-        additionalTargets: [Target],
-        additionalFiles: [FileElement]
-    ) -> Project {
-        let appDependencies = dependencies + filterTestDependencies(from: additionalTargets)
-        let targets = createAppTargets(
+        destinations: Destinations = .iOS,
+        versionNumber: String = "1.0.0",
+        hasResources: Bool = true,
+        dependencies: [TargetDependency] = [],
+        additionalInfoPlist: [String : ProjectDescription.Plist.Value] = [:]
+    ) -> [Target] {
+        let appTarget = createAppTarget(
             name: name,
             bundleId: bundleId,
             destinations: destinations,
             versionNumber: versionNumber,
-            platform: platform,
-            dependencies: appDependencies
-        ) + additionalTargets
-        
-        let settings = createSettings(
-            versionNumber: versionNumber,
-            devTeam: devTeam
+            hasResources: hasResources,
+            dependencies: dependencies,
+            additionalInfoPlist: additionalInfoPlist
         )
         
-        return Project(
+        let testTarget = createAppTestTarget(
             name: name,
-            organizationName: organizationName,
-            packages: packages,
-            settings: settings,
-            targets: targets,
-            additionalFiles: additionalFiles,
-            resourceSynthesizers: .default
+            bundleId: bundleId,
+            destinations: destinations
+        )
+        
+        return [appTarget, testTarget]
+    }
+    
+    public static func createAppTarget(
+        name: String,
+        bundleId: String,
+        destinations: Destinations = .iOS,
+        versionNumber: String = "1.0.0",
+        hasResources: Bool = true,
+        dependencies: [TargetDependency] = [],
+        additionalInfoPlist: [String : ProjectDescription.Plist.Value] = [:]
+    ) -> Target {
+        return Target.target(
+            name: name,
+            destinations: destinations,
+            product: .app,
+            bundleId: "\(bundleId).\(name)",
+            infoPlist: .extendingDefault(
+                with: baseInfoPlist(version: versionNumber).merging(additionalInfoPlist) { $1 }
+            ),
+            sources: [SourcePaths.Apps.sources(appName: name)],
+            resources: hasResources ? [SourcePaths.Apps.resources(appName: name)] : nil,
+            dependencies: dependencies,
+            settings: createSettings()
         )
     }
     
+    public static func createAppTestTarget(
+        name: String,
+        bundleId: String,
+        destinations: Destinations,
+        hasResources: Bool = false
+    ) -> Target {
+        return Target.target(
+            name: "\(name)Tests",
+            destinations: destinations,
+            product: .unitTests,
+            bundleId: "\(bundleId).\(name)Tests",
+            infoPlist: .default,
+            sources: [SourcePaths.Apps.tests(appName: name)],
+            resources: hasResources ? [SourcePaths.Apps.testResources(appName: name)] : nil,
+            dependencies: [.target(name: name)]
+        )
+    }
     
-    static func moduleTarget(
+    public static func moduleTarget(
         name: String,
         bundleId: String,
         destinations: Destinations = [.iPhone],
@@ -77,7 +107,7 @@ extension Target {
         )
     }
 
-    static func moduleTestTarget(
+    public static func moduleTestTarget(
         name: String,
         bundleId: String,
         hasResources: Bool = false,
@@ -101,92 +131,32 @@ extension Target {
         )
     }
     
-    // MARK: - Private Helpers
-    
-    private static func createAppTargets(
-        name: String,
-        bundleId: String,
-        destinations: Destinations,
-        versionNumber: String,
-        platform: Platform,
-        dependencies: [TargetDependency]
-    ) -> [Target] {
-        let appTarget = generateAppTarget(
-            name: name,
-            bundleId: bundleId,
-            destinations: destinations,
-            versionNumber: versionNumber,
-            dependencies: dependencies
-        )
-        
-        let testTarget = generateAppTestTarget(
-            name: name,
-            bundleId: bundleId,
-            destinations: destinations
-        )
-        
-        return [appTarget, testTarget]
-    }
-    
-    private static func generateAppTarget(
-        name: String,
-        bundleId: String,
-        destinations: Destinations,
-        versionNumber: String,
-        dependencies: [TargetDependency]
-    ) -> Target {
-        let infoPlist: [String: Plist.Value] = [
-            "CFBundleShortVersionString": Plist.Value(stringLiteral: versionNumber),
+    private static func baseInfoPlist(version: String) -> [String: ProjectDescription.Plist.Value] {
+        return [
+            "UILaunchScreen": ["UIColorName": "AccentColor"],
+            "CFBundleShortVersionString": .string(version),
             "CFBundleVersion": "1",
-            "UILaunchScreen": [
-                "UIColorName": "AccentColor"
-            ],
+            "LSApplicationCategoryType": "public.app-category.utilities",
             "ITSAppUsesNonExemptEncryption": false
         ]
-        
-        return Target.target(
-            name: name,
-            destinations: destinations,
-            product: .app,
-            bundleId: "\(bundleId).\(name)",
-            infoPlist: .extendingDefault(with: infoPlist),
-            sources: ["Targets/\(name)/Sources/**"],
-            resources: ["Targets/\(name)/Resources/**"],
-            dependencies: dependencies
+    }
+
+    private static func createSettings() -> Settings {
+        return .settings(
+            base: [
+                "CODE_SIGN_IDENTITY": "$(codeSignIdentity)",
+                "CODE_SIGN_STYLE": "Automatic",
+                "DEVELOPMENT_TEAM": "$(developmentTeam)",
+                "DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER": "NO",
+                "TARGETED_DEVICE_FAMILY": "1",
+            ],
+            debug: [
+                "ENABLE_DEBUG_DYLIB": true,
+            ],
+            release: [:],
+            defaultSettings: .recommended(excluding: [
+                "CODE_SIGN_IDENTITY",
+            ])
         )
     }
-    
-    private static func generateAppTestTarget(
-        name: String,
-        bundleId: String,
-        destinations: Destinations
-    ) -> Target {
-        return Target.target(
-            name: "\(name)Tests",
-            destinations: destinations,
-            product: .unitTests,
-            bundleId: "\(bundleId).\(name)Tests",
-            infoPlist: .default,
-            sources: ["Targets/\(name)/Tests/**"],
-            dependencies: [.target(name: name)]
-        )
-    }
-    
-    private static func filterTestDependencies(from targets: [Target]) -> [TargetDependency] {
-        return targets.compactMap {
-            $0.name.hasSuffix("Tests") ? nil : TargetDependency.target(name: $0.name)
-        }
-    }
-    
-    private static func createSettings(
-        versionNumber: String,
-        devTeam: String
-    ) -> Settings {
-        let baseSettings = SettingsDictionary()
-            .automaticCodeSigning(devTeam: devTeam)
-            .marketingVersion(versionNumber)
-            .currentProjectVersion("Auto generated")
-        return Settings.settings(base: baseSettings, defaultSettings: .recommended)
-    }
-    
 }

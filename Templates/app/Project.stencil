@@ -19,8 +19,7 @@ let project = Project(
     ),
     targets: [
         // products
-        {{ name }}.target,
-    ],
+    ] + {{ name }}.targets,
     schemes: [
         .scheme(
             name: "{{ name }}",

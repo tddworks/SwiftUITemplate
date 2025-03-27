@@ -67,6 +67,14 @@ let appTemplate = Template(
              templatePath: "../Sources/ContentView.stencil"
          ),
         .file(
+             path: "\(rootPath)/\(nameAttribute)/TestsSources/\(nameAttribute)Tests.swift",
+             templatePath: "../TestSources/Tests.stencil"
+         ),
+        .file(
+             path: "\(rootPath)/\(nameAttribute)/TestResources/InfoPlist.strings",
+             templatePath: "../Sources/ContentView.stencil"
+         ),
+        .file(
             path: "\(rootPath)/\(nameAttribute)/Resources/InfoPlist.strings",
             templatePath: "InfoPlist.stencil"
         ),
