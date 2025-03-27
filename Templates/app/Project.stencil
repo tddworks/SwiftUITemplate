@@ -38,9 +38,6 @@ let project = Project(
                         .launchArgument(name: "-com.apple.CoreData.ConcurrencyDebug 0", isEnabled: true),
                         .launchArgument(name: "-com.apple.CoreData.MigrationDebug 0", isEnabled: true),
                     ]
-                ),
-                options: .options(
-                    storeKitConfigurationPath: ""
                 )
             )
         )
