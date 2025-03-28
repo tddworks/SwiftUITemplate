@@ -99,8 +99,7 @@ extension Target {
                 base: [
                     "DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER": false,
                     "ENABLE_MODULE_VERIFIER": true,
-                    "MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS": ["gnu11", "gnu++14"],
-                    "SWIFT_VERSION": (usesMaxSwiftVersion ? "$(SWIFT_MAX_VERSION)" : "$(inherited)"),
+                    "MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS": ["gnu11", "gnu++14"]
                 ]
             )
         )
@@ -123,9 +122,7 @@ extension Target {
                 .target(name: "\(name)"),
             ] + dependencies,
             settings: .settings(
-                base: [
-                    "SWIFT_VERSION": "$(SWIFT_MAX_VERSION)",
-                ]
+                base: [:]
             )
         )
     }
