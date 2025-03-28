@@ -7,19 +7,20 @@
 
 import ProjectDescription
 
+let moduleName: Template.Attribute = .required("name")
 
 let moduleTemplate = Template(
     description: "New Module Template",
     attributes: [
-        nameAttribute,
+        moduleName,
     ],
     items: [
         .string(
-            path: "Modules/\(nameAttribute)/Sources/\(nameAttribute).swift",
+            path: "Modules/\(moduleName)/Sources/\(moduleName).swift",
             contents: "import Foundation"
         ),
         .file(
-            path: "Tuist/ProjectDescriptionHelpers/Targets/Modules/\(nameAttribute).swift",
+            path: "Tuist/ProjectDescriptionHelpers/Targets/Modules/\(moduleName).swift",
             templatePath: "target.stencil"
         ),
     ]

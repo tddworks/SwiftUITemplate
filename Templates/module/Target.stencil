@@ -10,13 +10,18 @@ import ProjectDescription
 public enum {{ name }} {
     public static let target = Target.moduleTarget(
         name: "{{ name }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
+        destinations: .iOS,
+        hasResources: true,
         dependencies: [
         ]
     )
 
     public static let testTarget = Target.moduleTestTarget(
-        name: "{{ name }}",
-        dependencies: [
-        ]
+       name: "{{ name }}",
+       bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
+       hasResources: true,
+       dependencies: [
+       ]
     )
 }

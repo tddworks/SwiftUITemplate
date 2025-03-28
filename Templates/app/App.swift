@@ -12,7 +12,7 @@ import ProjectDescription
 /// To specify a platform add the `--platforms` attribute as follows:
 /// `tuist scaffold feature --name NewApp --platforms iOS`
 
-let nameAttribute: Template.Attribute = .required("name")
+let appName: Template.Attribute = .required("name")
 
 let projectPath = "."
 
@@ -50,12 +50,12 @@ let companyAttribute: Template.Attribute = .optional("company", default: .string
 let appTemplate = Template(
     description: "New App template",
     attributes: [
-        nameAttribute,
+        appName,
         .optional("platform", default: "ios"),
     ],
     items: [
         .directory(path: "Tuist", sourcePath: "../../ProjectDescriptionHelpers"),
-        .directory(path: "\(productsPath )/\(nameAttribute)/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
+        .directory(path: "\(productsPath )/\(appName)/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
         .file(path: "./Project.swift",
               templatePath: "Project.stencil"),
         .file(
@@ -63,27 +63,27 @@ let appTemplate = Template(
                templatePath: "Package.stencil"
            ),
         .file(
-            path: "Tuist/ProjectDescriptionHelpers/Targets/Products/\(nameAttribute).swift",
+            path: "Tuist/ProjectDescriptionHelpers/Targets/Products/\(appName).swift",
             templatePath: "target.stencil"
         ),
         .file(
-             path: "\(productsPath )/\(nameAttribute)/Sources/\(nameAttribute)App.swift",
+             path: "\(productsPath )/\(appName)/Sources/\(appName)App.swift",
              templatePath: "../Sources/App.stencil"
          ),
         .file(
-             path: "\(productsPath )/\(nameAttribute)/Sources/ContentView.swift",
+             path: "\(productsPath )/\(appName)/Sources/ContentView.swift",
              templatePath: "../Sources/ContentView.stencil"
          ),
         .file(
-            path: "\(productsPath )/\(nameAttribute)/Resources/InfoPlist.strings",
+            path: "\(productsPath )/\(appName)/Resources/InfoPlist.strings",
             templatePath: "InfoPlist.stencil"
         ),
         .file(
-             path: "\(productsPath )/\(nameAttribute)/TestsSources/\(nameAttribute)Tests.swift",
+             path: "\(productsPath )/\(appName)/TestsSources/\(appName)Tests.swift",
              templatePath: "../TestSources/Tests.stencil"
          ),
         .file(
-             path: "\(productsPath )/\(nameAttribute)/TestResources/InfoPlist.strings",
+             path: "\(productsPath )/\(appName)/TestResources/InfoPlist.strings",
              templatePath: "../Sources/ContentView.stencil"
          ),
     ]

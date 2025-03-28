@@ -82,7 +82,7 @@ extension Target {
     public static func moduleTarget(
         name: String,
         bundleId: String,
-        destinations: Destinations = [.iPhone],
+        destinations: Destinations = .iOS,
         hasResources: Bool = false,
         usesMaxSwiftVersion: Bool = true,
         dependencies: [TargetDependency] = []
@@ -92,12 +92,11 @@ extension Target {
             destinations: destinations,
             product: .framework,
             bundleId: "\(bundleId).\(name)",
-            sources: ["Modules/\(name)/Sources/**"],
-            resources: hasResources ? ["Modules/\(name)/Resources/**"] : nil,
+            sources: [SourcePaths.Modules.sources(moduleName: name)],
+            resources: hasResources ? [SourcePaths.Modules.resources(moduleName: name)] : nil,
             dependencies: dependencies,
             settings: .settings(
                 base: [
-                    "CODE_SIGN_IDENTITY": "",
                     "DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER": false,
                     "ENABLE_MODULE_VERIFIER": true,
                     "MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS": ["gnu11", "gnu++14"],
@@ -115,11 +114,11 @@ extension Target {
     ) -> Target {
         return Target.target(
             name: "\(name)Tests",
-            destinations: [.iPhone],
+            destinations: .iOS,
             product: .unitTests,
             bundleId: "\(bundleId).\(name)Tests",
-            sources: ["Modules/\(name)/Tests/**"],
-            resources: hasResources ? ["Modules/\(name)/TestResources/**"] : nil,
+            sources: [SourcePaths.Modules.tests(moduleName: name)],
+            resources: hasResources ? [SourcePaths.Modules.testResources(moduleName: name)] : nil,
             dependencies: [
                 .target(name: "\(name)"),
             ] + dependencies,
