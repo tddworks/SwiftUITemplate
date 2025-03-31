@@ -8,6 +8,7 @@
 import ProjectDescription
 
 let moduleName: Template.Attribute = .required("name")
+let modulesPath  = "Modules"
 
 let moduleTemplate = Template(
     description: "New Module Template",
@@ -15,12 +16,13 @@ let moduleTemplate = Template(
         moduleName,
     ],
     items: [
+        .directory(path: "\(modulesPath)/\(moduleName)/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
         .string(
-            path: "Modules/\(moduleName)/Sources/\(moduleName).swift",
+            path: "\(modulesPath)/\(moduleName)/Sources/\(moduleName).swift",
             contents: "import Foundation"
         ),
         .file(
-            path: "Tuist/ProjectDescriptionHelpers/Targets/Modules/\(moduleName).swift",
+            path: "Tuist/ProjectDescriptionHelpers/Targets/\(modulesPath)/\(moduleName).swift",
             templatePath: "target.stencil"
         ),
     ]
