@@ -149,7 +149,7 @@ extension Target {
     ) -> Settings {
         let configurations: [Configuration] =  [
             .debug(name: .debug,
-                    settings: ["OTHER_SWIFT_FLAGS": "-DDEBUG", "OTHER_LDFLAGS": "$(inherited) -ObjC"],
+                    settings: ["OTHER_SWIFT_FLAGS": "-DDEBUG"],
                     xcconfig: "\(SourcePaths.Apps.appResourcesPath(appName: name))/XCConfig/debug.xcconfig"),
             .release(name: .release, xcconfig: "\(SourcePaths.Apps.appResourcesPath(appName: name))/XCConfig/release.xcconfig"),
         ]
@@ -161,7 +161,7 @@ extension Target {
             .currentProjectVersion("1")
             //MARKETING_VERSION (CFBundleShortVersionString in Info.plist)
             .marketingVersion(versionNumber)
-        return .settings(base: baseSettings, configurations: configurations, defaultSettings: .recommended)
+        return .settings(base: baseSettings.merging(["OTHER_LDFLAGS": "$(inherited) -ObjC"]), configurations: configurations, defaultSettings: .recommended)
     }
     
 }
