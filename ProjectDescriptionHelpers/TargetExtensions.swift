@@ -148,7 +148,9 @@ extension Target {
         devTeam: String
     ) -> Settings {
         let configurations: [Configuration] =  [
-            .debug(name: .debug, settings: ["OTHER_SWIFT_FLAGS": "-DDEBUG"], xcconfig: "\(SourcePaths.Apps.appResourcesPath(appName: name))/XCConfig/debug.xcconfig"),
+            .debug(name: .debug,
+                    settings: ["OTHER_SWIFT_FLAGS": "-DDEBUG", "OTHER_LDFLAGS": "$(inherited) -ObjC"],
+                    xcconfig: "\(SourcePaths.Apps.appResourcesPath(appName: name))/XCConfig/debug.xcconfig"),
             .release(name: .release, xcconfig: "\(SourcePaths.Apps.appResourcesPath(appName: name))/XCConfig/release.xcconfig"),
         ]
         
