@@ -1,6 +1,14 @@
 # SwiftUITemplate
 Tuist template
+```swift
+import ProjectDescription
 
+let tuist = Tuist(
+    project: .tuist(plugins: [
+         .git(url: "https://github.com/tddworks/SwiftUITemplate", tag: "v1.0.0")
+    ])
+)
+```
 The template is a starting point for creating a SwiftUI application using Tuist. It includes the following features:
 - Create a SwiftUI application
   -  tuist scaffold app --name AppName
