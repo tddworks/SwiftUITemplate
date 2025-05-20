@@ -21,7 +21,7 @@ import ProjectDescription
 
 let tuist = Tuist(
     project: .tuist(plugins: [
-        .git(url: "https://github.com/tddworks/SwiftUITemplate", tag: "v1.0.0")
+        .git(url: "https://github.com/tddworks/SwiftUITemplate", tag: "v1.0.1")
     ])
 )
 ```
