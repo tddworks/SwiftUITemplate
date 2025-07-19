@@ -50,7 +50,7 @@ extension Target {
             name: name,
             destinations: destinations,
             product: .app,
-            bundleId: "\(bundleId).\(name)",
+            bundleId: "\(bundleId).\(name.lowercased())",
             infoPlist: .extendingDefault(
                 with: baseInfoPlist(versionNumber: versionNumber).merging(additionalInfoPlist) { $1 }
             ),
@@ -71,7 +71,7 @@ extension Target {
             name: "\(name)Tests",
             destinations: destinations,
             product: .unitTests,
-            bundleId: "\(bundleId).\(name)Tests",
+            bundleId: "\(bundleId).\(name.lowercased())Tests",
             infoPlist: .default,
             sources: [SourcePaths.Apps.tests(appName: name)],
             resources: hasResources ? [SourcePaths.Apps.testResources(appName: name)] : nil,
@@ -91,7 +91,7 @@ extension Target {
             name: "\(name)",
             destinations: destinations,
             product: .framework,
-            bundleId: "\(bundleId).\(name)",
+            bundleId: "\(bundleId).\(name.lowercased())",
             sources: [SourcePaths.Modules.sources(moduleName: name)],
             resources: hasResources ? [SourcePaths.Modules.resources(moduleName: name)] : nil,
             dependencies: dependencies,
@@ -115,7 +115,7 @@ extension Target {
             name: "\(name)Tests",
             destinations: .iOS,
             product: .unitTests,
-            bundleId: "\(bundleId).\(name)Tests",
+            bundleId: "\(bundleId).\(name.lowercased())Tests",
             sources: [SourcePaths.Modules.tests(moduleName: name)],
             resources: hasResources ? [SourcePaths.Modules.testResources(moduleName: name)] : nil,
             dependencies: [
