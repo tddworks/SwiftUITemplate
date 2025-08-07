@@ -1,0 +1,44 @@
+//
+//  Target.stencil
+//  SwiftUITemplate
+//
+//  Created by hanrenwei on 3/25/25.
+//
+
+import ProjectDescription
+
+public enum {{ name }} {
+    public static let targets = Target.createAppTargets(
+        name: "{{ name }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
+        destinations: {% if platform == "ios" %}.iOS{% elif platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
+        versionNumber: "{{ version }}",
+        hasResources: true,
+        dependencies: [
+        ],
+        additionalInfoPlist: [
+            "NSPhotoLibraryUsageDescription": "BlurBlend requires access to your photo library to save the photo you've edited.",
+        ]
+    )
+    
+    public static let target = Target.createAppTarget(
+        name: "{{ name }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
+        destinations: {% if platform == "ios" %}.iOS{% elif platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
+        versionNumber: "{{ version }}",
+        hasResources: true,
+        dependencies: [
+        ],
+        additionalInfoPlist: [
+            "NSPhotoLibraryUsageDescription": "BlurBlend requires access to your photo library to save the photo you've edited.",
+        ]
+    )
+    
+    public static let testTarget = Target.createAppTestTarget(
+        name: "{{ name }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
+        destinations: {% if platform == "ios" %}.iOS{% elif platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
+        hasResources: true
+    )
+    
+}

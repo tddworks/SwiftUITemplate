@@ -6,8 +6,13 @@ public enum ProjectTargets {
     
     /// Returns all available targets for the project
     public static func allTargets(appTargets: [Target]) -> [Target] {
-        return appTargets + frameworkTargets + moduleTargets + extensionTargets
+        return appTargets + allAppTargets + frameworkTargets + moduleTargets + extensionTargets
     }
+    
+    /// Additional app targets - automatically updated by `tuist scaffold addapp`
+    private static let allAppTargets: [Target] = [
+        // Additional app targets will be added here automatically
+    ]
     
     /// Framework targets - automatically updated by `tuist scaffold framework`
     private static let frameworkTargets: [Target] = [

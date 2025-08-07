@@ -38,13 +38,13 @@ let tuist = Tuist(
 Generate a new SwiftUI application:
 
 ```sh
-tuist scaffold app --name MyApp --platform ios --bundleId com.example --version 1.0.0
+tuist scaffold app --name MyApp --platform ios --bundle-id com.example --version 1.0.0
 ```
 
 **Options:**
 - `name` (required): App name
 - `platform`: Target platform (ios/macos)
-- `bundleId`: Bundle identifier prefix
+- `bundle-id`: Bundle identifier prefix
 - `version`: App version
 - `hasTests`: Include test target (default: true)
 - `hasUITests`: Include UI test target (default: false)
@@ -73,14 +73,14 @@ Root/
 Generate a reusable framework:
 
 ```sh
-tuist scaffold framework --name Core --isStatic false --hasResources true
+tuist scaffold framework --name Core --is-static false --has-resources true
 ```
 
 **Options:**
 - `name` (required): Framework name
-- `isStatic`: Create static framework (default: false)
-- `hasResources`: Include resources (default: false)
-- `hasTests`: Include test target (default: true)
+- `is-static`: Create static framework (default: false)
+- `has-resources`: Include resources (default: false)
+- `has-tests`: Include test target (default: true)
 - `dependencies`: Array of dependencies
 
 **Resulting Structure:**
@@ -121,14 +121,14 @@ Root/
 Generate an app extension:
 
 ```sh
-tuist scaffold extension --name MyWidget --type widget --hostApp MyApp
+tuist scaffold extension --name MyWidget --type widget --host-app MyApp
 ```
 
 **Options:**
 - `name` (required): Extension name
 - `type` (required): Extension type (widget, notification, share, etc.)
 - `hostApp` (required): Host app name
-- `bundleId`: Bundle identifier prefix
+- `bundle-id`: Bundle identifier prefix
 - `version`: Extension version
 - `hasUI`: Include UI components (default: true)
 
@@ -142,6 +142,28 @@ tuist scaffold extension --name MyWidget --type widget --hostApp MyApp
 - `intentui`: Intents UI Extension
 - `fileprovider`: File Provider Extension
 - `fileproviderui`: File Provider UI Extension
+
+#### Add App to Existing Project
+
+Add additional app targets to an existing project:
+
+```sh
+tuist scaffold addapp --name DemoApp --platform macos --bundle-id com.mycompany.demo
+```
+
+**Options:**
+- `name` (required): New app name
+- `platform`: Target platform (ios, macos, watchos, tvos) (default: ios)
+- `bundle-id`: Bundle identifier prefix (default: com.example)
+- `version`: App version (default: 1.0.0)
+- `hasTests`: Include test target (default: true)
+- `hasUITests`: Include UI test target (default: false)
+
+**Notes:**
+- Use `addapp` only after creating the initial project with `app` template
+- Does not overwrite existing Project.swift or Tuist configuration
+- Automatically creates app target definition files
+- Supports multiple platforms in same project (iOS + macOS + watchOS + tvOS)
 
 #### Create a Workspace (Multi-App Support)
 
@@ -184,11 +206,11 @@ tuist scaffold multiapp --name NewApp --workspace MyWorkspace
 #### Single App Project
 
 ```bash
-# 1. Create the main app
-tuist scaffold app --name MyApp --platform ios --bundleId com.mycompany
+# 1. Create the main app and project structure
+tuist scaffold app --name MyApp --platform ios --bundle-id com.mycompany
 
 # 2. Add a shared framework
-tuist scaffold framework --name Core --hasResources false
+tuist scaffold framework --name Core --has-resources false
 
 # 3. Add feature modules
 tuist scaffold module --name Authentication
@@ -196,12 +218,19 @@ tuist scaffold module --name UserProfile
 tuist scaffold module --name Settings
 
 # 4. Add a widget extension
-tuist scaffold extension --name MyWidget --type widget --hostApp MyApp
+tuist scaffold extension --name MyWidget --type widget --host-app MyApp
 
 # 5. Add a file provider extension
-tuist scaffold extension --name MyCloudSync --type fileprovider --hostApp MyApp
+tuist scaffold extension --name MyCloudSync --type fileprovider --host-app MyApp
 
 # 6. Generate the project
+tuist generate
+
+# 7. Add additional apps to the same project (optional)
+tuist scaffold addapp --name MyApp1 --platform macos --bundle-id com.mycompany.macos
+tuist scaffold addapp --name DemoApp --platform ios --bundle-id com.mycompany.demo
+
+# 8. Generate with all apps
 tuist generate
 ```
 

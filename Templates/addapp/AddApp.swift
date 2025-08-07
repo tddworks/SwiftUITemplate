@@ -3,16 +3,15 @@ import ProjectDescription
 
 /// # Usage
 ///
-/// In root of the app, run:
-/// `tuist scaffold app --name MyApp`
+/// In root of an existing project (after running `tuist scaffold app` to create initial project), run:
+/// `tuist scaffold addapp --name DemoApp --platform ios --bundle-id com.mycompany.demo`
 ///
-/// This will create a new app target with SwiftUI support.
+/// This will add a new app target to the existing project without overwriting project files.
 ///
-/// To specify additional options:
-/// `tuist scaffold app --name MyApp --platform ios --author "John Doe" --company "Acme Inc"`
+/// Available platforms: ios, macos, watchos, tvos
 
-let appTemplate = Template(
-    description: "Creates a new iOS/macOS app target with SwiftUI support",
+let addAppTemplate = Template(
+    description: "Adds a new app target to an existing project",
     attributes: [
         .required("name"),
         .optional("platform", default: "ios"),
@@ -22,11 +21,7 @@ let appTemplate = Template(
         .optional("hasUITests", default: .boolean(false))
     ],
     items: [
-        // Project structure (only created if not exists)
-        .directory(path: "Tuist", sourcePath: "../../ProjectDescriptionHelpers"),
-        .file(path: "./Project.swift", templatePath: "Project.stencil"),  
-        .file(path: "./Package.swift", templatePath: "Package.stencil"),
-        // App-specific files (always created)
+        // Only app-specific files - no Project.swift or Tuist/ directory conflicts
         .file(
             path: "Tuist/ProjectDescriptionHelpers/Targets/Products/{{ name }}.swift",
             templatePath: "Target.stencil"
@@ -51,4 +46,3 @@ let appTemplate = Template(
         .string(path: "Products/{{ name }}/Resources/.gitkeep", contents: "")
     ]
 )
-
