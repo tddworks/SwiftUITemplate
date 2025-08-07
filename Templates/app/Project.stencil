@@ -17,7 +17,10 @@ let project = Project(
             .currentProjectVersion("1")
             .automaticCodeSigning(devTeam: "{{TEAM_ID}}")
     ),
-    targets: ProjectTargets.allTargets(appTargets: {{ name }}.targets),
+    targets: {{ name }}.targets + [
+        // Additional targets will be added here by scaffold commands
+        // Run 'bash regenerate-project.sh' after scaffolding to update this list
+    ],
     schemes: [
         .scheme(
             name: "{{ name }}",

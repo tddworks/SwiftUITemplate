@@ -40,6 +40,14 @@ let addFrameworkTemplate = Template(
         .file(
             path: "Frameworks/{{ name }}/Tests/{{ name }}Tests.swift",
             templatePath: "../framework/FrameworkTests.stencil"
+        ),
+        .file(
+            path: "regenerate-project.sh",
+            templatePath: .relativeToRoot("Templates/shared/regenerate-project.sh")
+        ),
+        .string(
+            path: "SCAFFOLD_SUCCESS.md",
+            contents: "# ✅ {{ name }} Framework Scaffolded!\n\n## Automatic Project.swift Update\n\nRun this command to automatically regenerate Project.swift:\n\n```bash\nbash regenerate-project.sh\n```\n\nThen generate your project:\n\n```bash\ntuist generate\n```\n\n## What this does:\n- 🔍 Scans all target files dynamically (no hard-coding!)\n- 🔄 Regenerates Project.swift with direct target listing\n- 📦 Includes ALL frameworks, modules, extensions, and apps automatically\n- 🌟 Eliminates ProjectTargets.swift entirely\n- ✨ Works for any project name and target names\n\n---\n*This script can be deleted after running the update.*"
         )
     ]
 )
