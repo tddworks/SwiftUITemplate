@@ -1,0 +1,22 @@
+//
+//  {{ name }}.swift
+//  Target definition for {{ name }} extension
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import ProjectDescription
+
+public enum {{ name }} {
+    public static let target = Target.extensionTarget(
+        name: "{{ name }}",
+        bundleId: "{{ bundleId }}.{{ hostApp }}.{{ name }}",
+        extensionType: .{{ type }},
+        destinations: .iOS,
+        hostApp: "{{ hostApp }}",
+        version: "{{ version }}",
+        hasUI: {{ hasUI }},
+        dependencies: []
+    )
+}

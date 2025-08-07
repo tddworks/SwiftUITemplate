@@ -6,6 +6,44 @@
 //
 
 import ProjectDescription
+
+// MARK: - Extension Types
+
+public enum ExtensionType: String {
+    case widget = "widget"
+    case notification = "notification-service"
+    case action = "action"
+    case share = "share"
+    case today = "today"
+    case intents = "intents"
+    case intentsUI = "intents-ui"
+    case fileProvider = "file-provider"
+    case fileProviderUI = "file-provider-ui"
+    
+    var product: Product {
+        switch self {
+        case .widget:
+            return .appExtension
+        case .notification:
+            return .appExtension
+        case .action:
+            return .actionExtension
+        case .share:
+            return .appExtension
+        case .today:
+            return .appExtension
+        case .intents:
+            return .appExtension
+        case .intentsUI:
+            return .appExtension
+        case .fileProvider:
+            return .appExtension
+        case .fileProviderUI:
+            return .appExtension
+        }
+    }
+}
+
 // https://www.adamtecle.com/blog/tuist-xcconfigs
 extension Target {
 
@@ -105,6 +143,70 @@ extension Target {
         )
     }
 
+    public static func frameworkTarget(
+        name: String,
+        bundleId: String,
+        destinations: Destinations = .iOS,
+        hasResources: Bool = false,
+        isStatic: Bool = false,
+        dependencies: [TargetDependency] = []
+    ) -> Target {
+        Target.target(
+            name: name,
+            destinations: destinations,
+            product: isStatic ? .staticFramework : .framework,
+            bundleId: "\(bundleId).\(name.lowercased())",
+            sources: [SourcePaths.Frameworks.sources(frameworkName: name)],
+            resources: hasResources ? [SourcePaths.Frameworks.resources(frameworkName: name)] : nil,
+            dependencies: dependencies,
+            settings: SettingsFactory.frameworkSettings(usesMaxSwiftVersion: true)
+        )
+    }
+    
+    public static func frameworkTestTarget(
+        name: String,
+        bundleId: String,
+        hasResources: Bool = false,
+        dependencies: [TargetDependency] = []
+    ) -> Target {
+        return Target.target(
+            name: "\(name)Tests",
+            destinations: .iOS,
+            product: .unitTests,
+            bundleId: "\(bundleId).\(name.lowercased())Tests",
+            sources: [SourcePaths.Frameworks.tests(frameworkName: name)],
+            resources: hasResources ? [SourcePaths.Frameworks.testResources(frameworkName: name)] : nil,
+            dependencies: [
+                .target(name: name),
+            ] + dependencies,
+            settings: SettingsFactory.testSettings()
+        )
+    }
+    
+    public static func extensionTarget(
+        name: String,
+        bundleId: String,
+        extensionType: ExtensionType,
+        destinations: Destinations = .iOS,
+        hostApp: String,
+        version: String = "1.0.0",
+        hasUI: Bool = true,
+        dependencies: [TargetDependency] = []
+    ) -> Target {
+        Target.target(
+            name: name,
+            destinations: destinations,
+            product: extensionType.product,
+            bundleId: "\(bundleId).\(hostApp.lowercased()).\(name.lowercased())",
+            infoPlist: .extendingDefault(with: extensionInfoPlist(type: extensionType)),
+            sources: [SourcePaths.Extensions.sources(extensionName: name)],
+            resources: hasUI ? [SourcePaths.Extensions.resources(extensionName: name)] : nil,
+            entitlements: SourcePaths.Extensions.entitlements(extensionName: name),
+            dependencies: dependencies,
+            settings: SettingsFactory.extensionSettings()
+        )
+    }
+    
     public static func moduleTestTarget(
         name: String,
         bundleId: String,
@@ -164,4 +266,57 @@ extension Target {
         return .settings(base: baseSettings.merging(["OTHER_LDFLAGS": "$(inherited) -ObjC"]), configurations: configurations, defaultSettings: .recommended)
     }
     
+    // MARK: - Private Helpers
+    
+    private static func extensionInfoPlist(type: ExtensionType) -> [String: Plist.Value] {
+        var plist: [String: Plist.Value] = [
+            "CFBundleDisplayName": "$(PRODUCT_NAME)",
+            "NSExtension": [:]
+        ]
+        
+        switch type {
+        case .widget:
+            plist["NSExtension"] = [
+                "NSExtensionPointIdentifier": "com.apple.widgetkit-extension"
+            ]
+        case .notification:
+            plist["NSExtension"] = [
+                "NSExtensionPointIdentifier": "com.apple.usernotifications.service",
+                "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).NotificationService"
+            ]
+        case .action:
+            plist["NSExtension"] = [
+                "NSExtensionPointIdentifier": "com.apple.ui-services"
+            ]
+        case .share:
+            plist["NSExtension"] = [
+                "NSExtensionPointIdentifier": "com.apple.share-services"
+            ]
+        case .today:
+            plist["NSExtension"] = [
+                "NSExtensionPointIdentifier": "com.apple.widget-extension"
+            ]
+        case .intents:
+            plist["NSExtension"] = [
+                "NSExtensionPointIdentifier": "com.apple.intents-service"
+            ]
+        case .intentsUI:
+            plist["NSExtension"] = [
+                "NSExtensionPointIdentifier": "com.apple.intents-ui-service"
+            ]
+        case .fileProvider:
+            plist["NSExtension"] = [
+                "NSExtensionPointIdentifier": "com.apple.fileprovider-nonui",
+                "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).FileProviderExtension"
+            ]
+        case .fileProviderUI:
+            plist["NSExtension"] = [
+                "NSExtensionPointIdentifier": "com.apple.fileprovider-actionsui",
+                "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).FileProviderUIExtension",
+                "NSExtensionActivationRule": "TRUEPREDICATE"
+            ]
+        }
+        
+        return plist
+    }
 }

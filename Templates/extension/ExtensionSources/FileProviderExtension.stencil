@@ -1,0 +1,152 @@
+//
+//  {{ name }}.swift
+//  {{ name }}
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import FileProvider
+import Foundation
+
+class FileProviderExtension: NSFileProviderExtension {
+    
+    override init() {
+        super.init()
+    }
+    
+    // MARK: - Item Management
+    
+    override func item(for identifier: NSFileProviderItemIdentifier) throws -> NSFileProviderItem {
+        // Resolve the given identifier to a record in the model
+        // Throw NSError.fileProviderErrorForNonExistentItem(withIdentifier:) if it fails
+        
+        if identifier == .rootContainer {
+            return FileProviderItem(identifier: identifier)
+        }
+        
+        // TODO: Implement proper item lookup
+        throw NSError.fileProviderErrorForNonExistentItem(withIdentifier: identifier)
+    }
+    
+    override func urlForItem(withPersistentIdentifier identifier: NSFileProviderItemIdentifier) -> URL? {
+        // Resolve the given identifier to a file on disk
+        guard let item = try? item(for: identifier) else {
+            return nil
+        }
+        
+        // Use file coordination for safe access
+        return FileProviderExtension.default?.documentStorageURL.appendingPathComponent(identifier.rawValue)
+    }
+    
+    override func persistentIdentifierForItem(at url: URL) -> NSFileProviderItemIdentifier? {
+        // Resolve the given URL to a persistent identifier
+        let pathComponents = url.pathComponents
+        
+        // TODO: Implement proper identifier resolution
+        return nil
+    }
+    
+    // MARK: - Enumeration
+    
+    override func enumerator(for containerItemIdentifier: NSFileProviderItemIdentifier) throws -> NSFileProviderEnumerator {
+        return FileProviderEnumerator(containerIdentifier: containerItemIdentifier)
+    }
+    
+    // MARK: - Actions
+    
+    override func createDirectory(withName directoryName: String, inParentItemIdentifier parentItemIdentifier: NSFileProviderItemIdentifier, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) {
+        // TODO: Create a new directory
+        let error = NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo: [:])
+        completionHandler(nil, error)
+    }
+    
+    override func createItem(basedOn itemTemplate: NSFileProviderItem, fields: NSFileProviderItemFields, contents url: URL?, options: NSFileProviderCreateItemOptions = [], completionHandler: @escaping (NSFileProviderItem?, NSFileProviderItemFields, Bool, Error?) -> Void) {
+        // TODO: Create a new item
+        let error = NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo: [:])
+        completionHandler(nil, [], false, error)
+    }
+    
+    override func modifyItem(_ item: NSFileProviderItem, baseVersion version: NSFileProviderItemVersion, changedFields: NSFileProviderItemFields, contents newContents: URL?, options: NSFileProviderModifyItemOptions = [], completionHandler: @escaping (NSFileProviderItem?, NSFileProviderItemFields, Bool, Error?) -> Void) {
+        // TODO: Modify an existing item
+        let error = NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo: [:])
+        completionHandler(nil, [], false, error)
+    }
+    
+    override func deleteItem(identifier: NSFileProviderItemIdentifier, baseVersion version: NSFileProviderItemVersion, options: NSFileProviderDeleteItemOptions = [], completionHandler: @escaping (Error?) -> Void) {
+        // TODO: Delete an item
+        let error = NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo: [:])
+        completionHandler(error)
+    }
+    
+    // MARK: - Fetching
+    
+    override func fetchContents(for itemIdentifier: NSFileProviderItemIdentifier, version requestedVersion: NSFileProviderItemVersion?, completionHandler: @escaping (URL?, NSFileProviderItem?, Error?) -> Void) {
+        // TODO: Fetch file contents
+        let error = NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo: [:])
+        completionHandler(nil, nil, error)
+    }
+}
+
+// MARK: - File Provider Item
+
+class FileProviderItem: NSObject, NSFileProviderItem {
+    
+    private let identifier: NSFileProviderItemIdentifier
+    
+    init(identifier: NSFileProviderItemIdentifier) {
+        self.identifier = identifier
+        super.init()
+    }
+    
+    var itemIdentifier: NSFileProviderItemIdentifier {
+        return identifier
+    }
+    
+    var parentItemIdentifier: NSFileProviderItemIdentifier {
+        return identifier == .rootContainer ? .rootContainer : .rootContainer
+    }
+    
+    var capabilities: NSFileProviderItemCapabilities {
+        return [.allowsReading, .allowsWriting, .allowsRenaming, .allowsReparenting, .allowsTrashing, .allowsDeleting]
+    }
+    
+    var filename: String {
+        return identifier == .rootContainer ? "Root" : "Item"
+    }
+    
+    var typeIdentifier: String {
+        return identifier == .rootContainer ? "public.folder" : "public.data"
+    }
+}
+
+// MARK: - File Provider Enumerator
+
+class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
+    
+    private let containerIdentifier: NSFileProviderItemIdentifier
+    
+    init(containerIdentifier: NSFileProviderItemIdentifier) {
+        self.containerIdentifier = containerIdentifier
+        super.init()
+    }
+    
+    func invalidate() {
+        // TODO: Perform any necessary cleanup
+    }
+    
+    func enumerateItems(for observer: NSFileProviderEnumerationObserver, startingAt page: NSFileProviderPage) {
+        // TODO: Enumerate items
+        observer.didEnumerate([])
+        observer.finishEnumerating(upTo: nil)
+    }
+    
+    func enumerateChanges(for observer: NSFileProviderChangeObserver, from anchor: NSFileProviderSyncAnchor) {
+        // TODO: Enumerate changes
+        observer.finishEnumeratingChanges(upTo: anchor, moreComing: false)
+    }
+    
+    func currentSyncAnchor(completionHandler: @escaping (NSFileProviderSyncAnchor?) -> Void) {
+        completionHandler(NSFileProviderSyncAnchor(Date().data(using: .utf8)!))
+    }
+}

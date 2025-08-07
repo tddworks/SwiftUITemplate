@@ -1,93 +1,88 @@
 import Foundation
 import ProjectDescription
 
-
 /// # Usage
 ///
 /// In root of the app, run:
 /// `tuist scaffold app --name MyApp`
 ///
-/// This will create a new Feature project named `MyProject` under `Modules/` for platforms `macOS` by default.
+/// This will create a new app target with SwiftUI support.
 ///
-/// To specify a platform add the `--platforms` attribute as follows:
-/// `tuist scaffold feature --name NewApp --platforms iOS`
+/// To specify additional options:
+/// `tuist scaffold app --name MyApp --platform ios --author "John Doe" --company "Acme Inc"`
 
-let appName: Template.Attribute = .required("name")
-
-let projectPath = "."
-
-let productsPath  = "Products"
-
-let defaultAuthor: String = {
-    let arguments = ["config", "user.name"]
-
-    // shell will return output with trailing \n
-    let output = executeCommand(command: "/usr/bin/git", args: arguments).trimmingCharacters(in: .whitespacesAndNewlines)
-
-    // if no git repo, we just get the system's user name
-    return output != "" ? output : NSUserName()
-}()
-
-let defaultYear: String = {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy"
-    return dateFormatter.string(from: Date())
-}()
-
-let defaultDate: String = {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "dd/MM/yyyy"
-    return dateFormatter.string(from: Date())
-}()
-
-let yearAttribute: Template.Attribute = .optional("year", default: .string(defaultYear))
-let dateAttribute: Template.Attribute = .optional("date", default: .string(defaultDate))
-
-let authorAttribute: Template.Attribute = .optional("author", default: .string(defaultAuthor))
-
-let companyAttribute: Template.Attribute = .optional("company", default: .string(""))
+let config = TemplateConfiguration()
+let paths = TemplatePaths.self
 
 let appTemplate = Template(
-    description: "New App template",
+    description: "Creates a new iOS/macOS app target with SwiftUI support",
     attributes: [
-        appName,
-        .optional("platform", default: "ios"),
+        config.name,
+        config.platform,
+        config.author,
+        config.company,
+        config.year,
+        config.date,
+        .optional("bundleId", default: "com.example"),
+        .optional("version", default: "1.0.0"),
+        .optional("hasTests", default: .boolean(true)),
+        .optional("hasUITests", default: .boolean(false))
     ],
-    items: [
+    items: appTemplateItems()
+)
+
+func appTemplateItems() -> [Template.Item] {
+    let name = "{{ name }}"
+    let appPath = paths.productPath(name)
+    
+    var items: [Template.Item] = [
+        // Project structure
         .directory(path: "Tuist", sourcePath: "../../ProjectDescriptionHelpers"),
-        .directory(path: "\(productsPath )/\(appName)/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
-        .file(path: "./Project.swift",
-              templatePath: "Project.stencil"),
+        .directory(path: "\(appPath)/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
+        
+        // Project files
+        .file(path: "./Project.swift", templatePath: "Project.stencil"),
+        .file(path: "./Package.swift", templatePath: "Package.stencil"),
+        
+        // Target definition
         .file(
-               path: projectPath + "/Package.swift",
-               templatePath: "Package.stencil"
-           ),
+            path: "\(paths.helpersPath)/Targets/Products/\(name).swift",
+            templatePath: "Target.stencil"
+        ),
+        
+        // App sources
         .file(
-            path: "Tuist/ProjectDescriptionHelpers/Targets/Products/\(appName).swift",
-            templatePath: "target.stencil"
+            path: "\(appPath)/Sources/\(name)App.swift",
+            templatePath: "../Sources/App.stencil"
         ),
         .file(
-             path: "\(productsPath )/\(appName)/Sources/\(appName)App.swift",
-             templatePath: "../Sources/App.stencil"
-         ),
+            path: "\(appPath)/Sources/ContentView.swift",
+            templatePath: "../Sources/ContentView.stencil"
+        ),
+        
+        // Resources
         .file(
-             path: "\(productsPath )/\(appName)/Sources/ContentView.swift",
-             templatePath: "../Sources/ContentView.stencil"
-         ),
-        .file(
-            path: "\(productsPath )/\(appName)/Resources/InfoPlist.strings",
+            path: "\(appPath)/Resources/InfoPlist.strings",
             templatePath: "InfoPlist.stencil"
         ),
-        .file(
-             path: "\(productsPath )/\(appName)/TestsSources/\(appName)Tests.swift",
-             templatePath: "../TestSources/Tests.stencil"
-         ),
-        .file(
-             path: "\(productsPath )/\(appName)/TestResources/InfoPlist.strings",
-             templatePath: "../Sources/ContentView.stencil"
-         ),
+        
+        // Assets
+        .directory(
+            path: "\(appPath)/Resources/Assets.xcassets",
+            sourcePath: "../Resources/Assets.xcassets"
+        )
     ]
-)
+    
+    // Conditionally add test files
+    items.append(contentsOf: [
+        .file(
+            path: "\(appPath)/Tests/\(name)Tests.swift",
+            templatePath: "../TestSources/Tests.stencil"
+        )
+    ])
+    
+    return items
+}
 
 func executeCommand(command: String, args: [String]) -> String {
     let task = Process()
