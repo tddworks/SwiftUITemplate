@@ -97,25 +97,5 @@ public enum ProjectFactory {
         }
     }
     
-    /// Collects all available targets from the scaffolded components
-    public static func allTargets() -> [Target] {
-        var targets: [Target] = []
-        
-        // Add app targets (these should always exist for the main app)
-        // App targets are managed by the individual target files
-        
-        // Add framework targets
-        // These are dynamically discovered from the Targets/Frameworks directory
-        
-        // Add module targets  
-        // These are dynamically discovered from the Targets/Modules directory
-        
-        // Add extension targets
-        // These are dynamically discovered from the Targets/Extensions directory
-        
-        // Note: This is a placeholder - actual target collection happens at build time
-        // through the individual target enum declarations
-        return targets
-    }
 }
 

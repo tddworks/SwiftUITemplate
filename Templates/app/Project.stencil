@@ -17,9 +17,7 @@ let project = Project(
             .currentProjectVersion("1")
             .automaticCodeSigning(devTeam: "{{TEAM_ID}}")
     ),
-    targets: [
-        // App targets
-    ] + {{ name }}.targets,
+    targets: ProjectTargets.allTargets(appTargets: {{ name }}.targets),
     schemes: [
         .scheme(
             name: "{{ name }}",
