@@ -8,40 +8,6 @@ import ProjectDescription
 
 // MARK: - Target Factory
 
-public enum ExtensionType: String {
-    case widget = "widget"
-    case notification = "notification-service"
-    case action = "action"
-    case share = "share"
-    case today = "today"
-    case intents = "intents"
-    case intentsUI = "intents-ui"
-    case fileProvider = "file-provider"
-    case fileProviderUI = "file-provider-ui"
-    
-    var product: Product {
-        switch self {
-        case .widget:
-            return .appExtension
-        case .notification:
-            return .appExtension
-        case .action:
-            return .actionExtension
-        case .share:
-            return .appExtension
-        case .today:
-            return .appExtension
-        case .intents:
-            return .appExtension
-        case .intentsUI:
-            return .appExtension
-        case .fileProvider:
-            return .appExtension
-        case .fileProviderUI:
-            return .appExtension
-        }
-    }
-}
 
 public enum TargetFactory {
     public static func createFramework(
@@ -160,7 +126,7 @@ public enum TargetFactory {
             sources: [SourcePaths.Apps.sources(appName: name)],
             resources: hasResources ? [SourcePaths.Apps.resources(appName: name)] : nil,
             dependencies: dependencies,
-            settings: SettingsFactory.appSettings(version: version)
+            settings: SettingsFactory.appSettingsWithVersion(version: version)
         )
     }
     

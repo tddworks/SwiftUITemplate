@@ -19,67 +19,37 @@ import ProjectDescription
 /// - fileprovider: File Provider Extension
 /// - fileproviderui: File Provider UI Extension
 
-let config = TemplateConfiguration()
-let paths = TemplatePaths.self
-
 let extensionTemplate = Template(
     description: "Creates a new app extension target",
     attributes: [
-        config.name,
-        config.platform,
-        config.author,
-        config.company,
-        config.year,
-        config.date,
+        .required("name"),
         .required("type"),
         .required("hostApp"),
         .optional("bundleId", default: "com.example"),
         .optional("version", default: "1.0.0"),
         .optional("hasUI", default: .boolean(true))
     ],
-    items: extensionTemplateItems()
-)
-
-func extensionTemplateItems() -> [Template.Item] {
-    let name = "{{ name }}"
-    let extensionPath = paths.extensionPath(name)
-    let type = "{{ type }}"
-    
-    var items: [Template.Item] = [
-        // Extension sources based on type
+    items: [
         .file(
-            path: "\(extensionPath)/Sources/\(name).swift",
-            templatePath: "ExtensionSources/\(type.capitalized)Extension.stencil"
+            path: "Extensions/{{ name }}/Sources/{{ name }}.swift",
+            templatePath: "ExtensionSources/WidgetExtension.stencil"
         ),
-        
-        // Info.plist for extension
         .file(
-            path: "\(extensionPath)/Resources/Info.plist",
+            path: "Extensions/{{ name }}/Resources/Info.plist",
             templatePath: "ExtensionInfo.stencil"
         ),
-        
-        // Target definition
         .file(
-            path: "\(paths.helpersPath)/Targets/Extensions/\(name).swift",
+            path: "Tuist/ProjectDescriptionHelpers/Targets/Extensions/{{ name }}.swift",
             templatePath: "ExtensionTarget.stencil"
-        )
-    ]
-    
-    // Add UI files if needed
-    items.append(contentsOf: [
+        ),
         .file(
-            path: "\(extensionPath)/Sources/\(name)View.swift",
+            path: "Extensions/{{ name }}/Sources/{{ name }}View.swift",
             templatePath: "ExtensionView.stencil"
-        )
-    ])
-    
-    // Add entitlements
-    items.append(
+        ),
         .file(
-            path: "\(extensionPath)/Resources/\(name).entitlements",
+            path: "Extensions/{{ name }}/Resources/{{ name }}.entitlements",
             templatePath: "ExtensionEntitlements.stencil"
         )
-    )
-    
-    return items
-}
+    ]
+)
+

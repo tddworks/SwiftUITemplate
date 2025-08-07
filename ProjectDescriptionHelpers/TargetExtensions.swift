@@ -27,7 +27,7 @@ public enum ExtensionType: String {
         case .notification:
             return .appExtension
         case .action:
-            return .actionExtension
+            return .appExtension
         case .share:
             return .appExtension
         case .today:
