@@ -12,7 +12,7 @@ public enum {{ name }} {
     public static let target = Target.extensionTarget(
         name: "{{ name }}",
         bundleId: "{{ bundleId }}.{{ hostApp }}.{{ name }}",
-        extensionType: .{{ type }},
+        extensionType: {% if type == "fileprovider" %}.fileProvider{% elif type == "fileproviderui" %}.fileProviderUI{% else %}.{{ type }}{% endif %},
         destinations: .iOS,
         hostApp: "{{ hostApp }}",
         version: "{{ version }}",

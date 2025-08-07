@@ -43,7 +43,7 @@ let appTemplate = Template(
             templatePath: "InfoPlist.stencil"
         ),
         .file(
-            path: "Products/{{ name }}/Tests/{{ name }}Tests.swift",
+            path: "Products/{{ name }}/TestsSources/{{ name }}Tests.swift",
             templatePath: "../Sources/Tests.stencil"
         ),
         .string(path: "Products/{{ name }}/Resources/.gitkeep", contents: "")

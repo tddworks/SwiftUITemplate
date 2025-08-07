@@ -18,7 +18,7 @@ let project = Project(
             .automaticCodeSigning(devTeam: "{{TEAM_ID}}")
     ),
     targets: [
-        // products
+        // App targets
     ] + {{ name }}.targets,
     schemes: [
         .scheme(
