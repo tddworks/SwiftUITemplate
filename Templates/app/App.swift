@@ -55,8 +55,8 @@ let appTemplate = Template(
             templatePath: .relativeToRoot("Templates/shared/regenerate-project.sh")
         ),
         .string(
-            path: "README.md",
-            contents: "# {{ name }}\n\n## 🔄 Automatic Project Updates\n\nAfter scaffolding new targets (modules, frameworks, extensions, or apps), run:\n\n```bash\nbash regenerate-project.sh\ntuist generate\n```\n\nThis will automatically update Project.swift to include all scaffolded targets.\n\n## Adding Components\n\n```bash\n# Add a module\ntuist scaffold addmodule --name UserProfile\n\n# Add a framework\ntuist scaffold addframework --name Core\n\n# Add an extension\ntuist scaffold addextension --name MyWidget --type widget --host-app {{ name }}\n\n# Add another app\ntuist scaffold addapp --name CompanionApp --platform macos\n\n# After adding any components, regenerate:\nbash regenerate-project.sh\ntuist generate\n```"
+            path: "PROJECT_GUIDE.md",
+            contents: "# {{ name }} - Project Guide\n\n## 🔄 Automatic Project Updates\n\nAfter scaffolding new targets (modules, frameworks, extensions, or apps), run:\n\n```bash\nbash regenerate-project.sh\ntuist generate\n```\n\nThis will automatically update Project.swift to include all scaffolded targets.\n\n## Adding Components\n\n```bash\n# Add a module\ntuist scaffold addmodule --name UserProfile\n\n# Add a framework\ntuist scaffold addframework --name Core\n\n# Add an extension\ntuist scaffold addextension --name MyWidget --type widget --host-app {{ name }}\n\n# Add another app\ntuist scaffold addapp --name CompanionApp --platform macos\n\n# After adding any components, regenerate:\nbash regenerate-project.sh\ntuist generate\n```\n\n## Project Structure\n\n```\n{{ name }}/\n├── Products/          # App targets\n├── Modules/           # Feature modules\n├── Frameworks/        # Shared frameworks\n├── Extensions/        # App extensions\n├── Tuist/            # Tuist configuration\n├── Project.swift     # Project definition (auto-generated)\n└── regenerate-project.sh  # Script to update Project.swift\n```"
         )
     ]
 )
