@@ -46,8 +46,8 @@ tuist scaffold app --name MyApp --platform ios --bundle-id com.example --version
 - `platform`: Target platform (ios/macos)
 - `bundle-id`: Bundle identifier prefix
 - `version`: App version
-- `hasTests`: Include test target (default: true)
-- `hasUITests`: Include UI test target (default: false)
+- `has-tests`: Include test target (default: true)
+- `has-ui-tests`: Include UI test target (default: false)
 
 **Resulting Structure:**
 ```
@@ -127,10 +127,10 @@ tuist scaffold extension --name MyWidget --type widget --host-app MyApp
 **Options:**
 - `name` (required): Extension name
 - `type` (required): Extension type (widget, notification, share, etc.)
-- `hostApp` (required): Host app name
+- `host-app` (required): Host app name
 - `bundle-id`: Bundle identifier prefix
 - `version`: Extension version
-- `hasUI`: Include UI components (default: true)
+- `has-ui`: Include UI components (default: true)
 
 **Available Extension Types:**
 - `widget`: Widget Extension
@@ -156,8 +156,8 @@ tuist scaffold addapp --name DemoApp --platform macos --bundle-id com.mycompany.
 - `platform`: Target platform (ios, macos, watchos, tvos) (default: ios)
 - `bundle-id`: Bundle identifier prefix (default: com.example)
 - `version`: App version (default: 1.0.0)
-- `hasTests`: Include test target (default: true)
-- `hasUITests`: Include UI test target (default: false)
+- `has-tests`: Include test target (default: true)
+- `has-ui-tests`: Include UI test target (default: false)
 
 **Notes:**
 - Use `addapp` only after creating the initial project with `app` template
@@ -351,7 +351,7 @@ File Provider extensions allow your app to provide files to the Files app and ot
 - Integrates with the Files app and document picker
 
 ```bash
-tuist scaffold extension --name MyCloudProvider --type fileprovider --hostApp MyApp
+tuist scaffold extension --name MyCloudProvider --type fileprovider --host-app MyApp
 ```
 
 #### File Provider UI Extension  
@@ -360,7 +360,7 @@ tuist scaffold extension --name MyCloudProvider --type fileprovider --hostApp My
 - Works in conjunction with File Provider Extension
 
 ```bash
-tuist scaffold extension --name MyCloudProviderUI --type fileproviderui --hostApp MyApp
+tuist scaffold extension --name MyCloudProviderUI --type fileproviderui --host-app MyApp
 ```
 
 **Generated Features:**
