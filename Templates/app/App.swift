@@ -48,7 +48,8 @@ let appTemplate = Template(
             path: "Products/{{ name }}/TestsSources/{{ name }}Tests.swift",
             templatePath: "../Sources/Tests.stencil"
         ),
-        .string(path: "Products/{{ name }}/Resources/.gitkeep", contents: "")
+        .string(path: "Products/{{ name }}/Resources/.gitkeep", contents: ""),
+        .string(path: "Products/{{ name }}/TestResources/.gitkeep", contents: "")
     ]
 )
 

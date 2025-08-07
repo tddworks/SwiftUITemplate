@@ -44,6 +44,7 @@ let addAppTemplate = Template(
             templatePath: "../Sources/Tests.stencil"
         ),
         .string(path: "Products/{{ name }}/Resources/.gitkeep", contents: ""),
+        .string(path: "Products/{{ name }}/TestResources/.gitkeep", contents: ""),
         .file(
             path: "regenerate-project.sh",
             templatePath: .relativeToRoot("Templates/shared/regenerate-project.sh")
