@@ -1,0 +1,28 @@
+//
+//  {{ name }}.swift
+//  Target definition for {{ name }} module
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import ProjectDescription
+
+public enum {{ name }} {
+    public static let target = Target.moduleTarget(
+        name: "{{ name }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
+        destinations: .iOS,
+        hasResources: true,
+        dependencies: [
+        ]
+    )
+
+    public static let testTarget = Target.moduleTestTarget(
+       name: "{{ name }}",
+       bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
+       hasResources: true,
+       dependencies: [
+       ]
+    )
+}
