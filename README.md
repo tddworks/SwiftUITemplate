@@ -33,6 +33,12 @@ let tuist = Tuist(
 
 ### 2. Available Templates
 
+**Template Types:**
+- **Initial Templates**: Use these for creating new projects (`app`, `framework`, `module`, `extension`, `workspace`)
+- **Addition Templates**: Use these for adding to existing projects (`addapp`, `addframework`, `addmodule`, `addextension`)
+
+The addition templates are safer as they never overwrite existing project configuration files.
+
 #### Create a New SwiftUI App
 
 Generate a new SwiftUI application:
@@ -165,6 +171,53 @@ tuist scaffold addapp --name DemoApp --platform macos --bundle-id com.mycompany.
 - Automatically creates app target definition files
 - Supports multiple platforms in same project (iOS + macOS + watchOS + tvOS)
 
+#### Add Framework to Existing Project
+
+Add additional framework targets to an existing project:
+
+```sh
+tuist scaffold addframework --name NetworkLayer --has-resources false --is-static false
+```
+
+**Options:**
+- `name` (required): Framework name
+- `platform`: Target platform (ios, macos, watchos, tvos) (default: ios)
+- `has-resources`: Include resources (default: false)
+- `has-tests`: Include test target (default: true)
+- `is-static`: Create static framework (default: false)
+
+#### Add Module to Existing Project
+
+Add additional module targets to an existing project:
+
+```sh
+tuist scaffold addmodule --name UserProfile
+```
+
+**Options:**
+- `name` (required): Module name
+
+#### Add Extension to Existing Project
+
+Add additional extension targets to an existing project:
+
+```sh
+tuist scaffold addextension --name MyWidget --type widget --host-app MyApp
+```
+
+**Options:**
+- `name` (required): Extension name
+- `type` (required): Extension type (widget, notification, share, etc.)
+- `host-app` (required): Host app name
+- `bundle-id`: Bundle identifier prefix (default: com.example)
+- `version`: Extension version (default: 1.0.0)
+- `has-ui`: Include UI components (default: true)
+
+**Safe Addition Templates:**
+- All `add*` templates are designed for existing projects
+- They never overwrite Project.swift, Package.swift, or Tuist/ configuration
+- Safe to use multiple times to incrementally build your project
+
 #### Create a Workspace (Multi-App Support)
 
 Generate a workspace supporting multiple app targets:
@@ -209,28 +262,27 @@ tuist scaffold multiapp --name NewApp --workspace MyWorkspace
 # 1. Create the main app and project structure
 tuist scaffold app --name MyApp --platform ios --bundle-id com.mycompany
 
-# 2. Add a shared framework
-tuist scaffold framework --name Core --has-resources false
-
-# 3. Add feature modules
-tuist scaffold module --name Authentication
-tuist scaffold module --name UserProfile
-tuist scaffold module --name Settings
-
-# 4. Add a widget extension
-tuist scaffold extension --name MyWidget --type widget --host-app MyApp
-
-# 5. Add a file provider extension
-tuist scaffold extension --name MyCloudSync --type fileprovider --host-app MyApp
-
-# 6. Generate the project
+# 2. Generate initial project
 tuist generate
 
-# 7. Add additional apps to the same project (optional)
+# 3. Add components safely to existing project
+tuist scaffold addframework --name Core --has-resources false
+tuist scaffold addframework --name NetworkLayer --has-resources false
+
+# 4. Add feature modules  
+tuist scaffold addmodule --name Authentication
+tuist scaffold addmodule --name UserProfile
+tuist scaffold addmodule --name Settings
+
+# 5. Add extensions
+tuist scaffold addextension --name MyWidget --type widget --host-app MyApp
+tuist scaffold addextension --name MyCloudSync --type fileprovider --host-app MyApp
+
+# 6. Add additional apps to the same project (optional)
 tuist scaffold addapp --name MyApp1 --platform macos --bundle-id com.mycompany.macos
 tuist scaffold addapp --name DemoApp --platform ios --bundle-id com.mycompany.demo
 
-# 8. Generate with all apps
+# 7. Generate final project with all components
 tuist generate
 ```
 
