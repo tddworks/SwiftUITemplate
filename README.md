@@ -143,9 +143,45 @@ tuist scaffold extension --name MyWidget --type widget --hostApp MyApp
 - `fileprovider`: File Provider Extension
 - `fileproviderui`: File Provider UI Extension
 
+#### Create a Workspace (Multi-App Support)
+
+Generate a workspace supporting multiple app targets:
+
+```sh
+tuist scaffold workspace --name MyWorkspace --apps "MainApp,CompanionApp,AdminApp"
+```
+
+**Options:**
+- `name` (required): Workspace name
+- `apps` (required): Comma-separated list of app names
+- `bundleIdPrefix`: Bundle identifier prefix (default: com.example)
+- `structure`: Project structure - "single" or "multi" (default: multi)
+- `sharedFrameworks`: Array of shared frameworks (default: ["Core", "Shared"])
+- `version`: Version number (default: 1.0.0)
+
+**Structure Options:**
+- `single`: All apps in one project file
+- `multi`: Separate project per app in workspace (recommended)
+
+#### Add App to Existing Workspace
+
+Add a new app to an existing workspace:
+
+```sh
+tuist scaffold multiapp --name NewApp --workspace MyWorkspace
+```
+
+**Options:**
+- `name` (required): New app name
+- `workspace` (required): Existing workspace name
+- `bundleIdPrefix`: Bundle identifier prefix
+- `sharedDependencies`: Dependencies on shared frameworks
+
 ---
 
-### 3. Complete Example Workflow
+### 3. Complete Example Workflows
+
+#### Single App Project
 
 ```bash
 # 1. Create the main app
@@ -169,10 +205,42 @@ tuist scaffold extension --name MyCloudSync --type fileprovider --hostApp MyApp
 tuist generate
 ```
 
+#### Multi-App Workspace
+
+```bash
+# 1. Create workspace with multiple apps
+tuist scaffold workspace --name MyWorkspace --apps "MainApp,AdminApp,CompanionApp" --bundleIdPrefix com.mycompany
+
+# 2. Add additional frameworks to shared project
+tuist scaffold framework --name NetworkLayer --hasResources false
+tuist scaffold framework --name DatabaseLayer --hasResources false
+
+# 3. Add more apps later
+tuist scaffold multiapp --name DebugApp --workspace MyWorkspace --sharedDependencies "Core,Shared,NetworkLayer"
+
+# 4. Add extensions for specific apps
+tuist scaffold extension --name MainAppWidget --type widget --hostApp MainApp
+tuist scaffold extension --name AdminDashboard --type today --hostApp AdminApp
+
+# 5. Generate the workspace
+tuist generate
+```
+
+#### Single Project with Multiple Apps
+
+```bash
+# 1. Create single project with multiple apps
+tuist scaffold workspace --name MyProject --apps "MainApp,CompanionApp" --structure single --bundleIdPrefix com.mycompany
+
+# 2. Generate the project
+tuist generate
+```
+
 ---
 
 ## 📁 Project Structure
 
+### Single App Project
 ```
 .
 ├── Products/          # App targets
@@ -191,6 +259,53 @@ tuist generate
 │       ├── SourcePaths.swift
 │       └── SettingsFactory.swift
 └── Project.swift
+```
+
+### Multi-App Workspace (Recommended)
+```
+MyWorkspace/
+├── MyWorkspace.xcworkspace/
+├── MainApp/
+│   ├── Sources/
+│   ├── Resources/
+│   ├── Tests/
+│   └── Project.swift
+├── AdminApp/
+│   ├── Sources/
+│   ├── Resources/
+│   ├── Tests/
+│   └── Project.swift
+├── CompanionApp/
+│   ├── Sources/
+│   ├── Resources/
+│   ├── Tests/
+│   └── Project.swift
+├── Shared/            # Shared frameworks project
+│   ├── Frameworks/
+│   │   ├── Core/
+│   │   └── Shared/
+│   └── Project.swift
+├── Tuist/
+│   ├── Config.swift
+│   └── ProjectDescriptionHelpers/
+│       ├── WorkspaceFactory.swift
+│       ├── TargetFactory.swift
+│       └── ...
+└── Workspace.swift
+```
+
+### Single Project with Multiple Apps
+```
+.
+├── Products/
+│   ├── MainApp/
+│   ├── AdminApp/
+│   └── CompanionApp/
+├── Frameworks/        # Shared frameworks
+├── Modules/           # Feature modules
+├── Extensions/        # App extensions
+├── Tuist/            # Tuist configuration
+└── Project.swift      # Contains all apps
 ```
 
 ---
@@ -264,10 +379,29 @@ Each target type can be configured with:
 
 1. **Modular Development**: Break your app into feature modules for better code organization
 2. **Shared Code**: Use frameworks for code shared between targets
-3. **Extensions**: Keep extension code minimal and focused
-4. **File Provider**: Use File Provider extensions for cloud storage integration
-5. **Testing**: Always include test targets for critical components
-6. **Dependencies**: Use explicit dependencies between modules
+3. **Multi-App Architecture**: Choose the right structure for your needs:
+   - **Workspace with separate projects**: Best for complex apps with different lifecycles
+   - **Single project**: Good for related apps sharing most code
+4. **Shared Frameworks**: Create `Core` for business logic, `Shared` for UI components
+5. **Extensions**: Keep extension code minimal and focused
+6. **File Provider**: Use File Provider extensions for cloud storage integration
+7. **Testing**: Always include test targets for critical components
+8. **Dependencies**: Use explicit dependencies between modules
+9. **Bundle IDs**: Use consistent bundle ID prefixes across all apps in workspace
+10. **Schemes**: Create separate schemes for each app target for easier development
+
+### Multi-App Scenarios
+
+**When to use Multiple Apps:**
+- Main app + Admin/Debug companion app
+- Consumer app + Business/Enterprise variant  
+- iOS app + macOS app sharing code
+- Different deployment targets (App Store vs Enterprise)
+- A/B testing different app experiences
+
+**Workspace vs Single Project:**
+- **Use Workspace**: When apps have different release cycles, teams, or significant differences
+- **Use Single Project**: When apps are closely related and developed together
 
 ---
 

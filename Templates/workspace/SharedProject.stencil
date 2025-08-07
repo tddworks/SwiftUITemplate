@@ -1,0 +1,62 @@
+//
+//  Project.swift
+//  Shared - Frameworks and Modules
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import ProjectDescription
+import ProjectDescriptionHelpers
+
+let project = Project(
+    name: "Shared",
+    organizationName: "{{ company }}",
+    targets: [
+        {% for framework in sharedFrameworks %}
+        {% if framework == "Core" %}
+        Target.frameworkTarget(
+            name: "Core",
+            bundleId: "{{ bundleIdPrefix }}",
+            destinations: .iOS,
+            hasResources: false,
+            dependencies: []
+        ),
+        Target.frameworkTestTarget(
+            name: "Core", 
+            bundleId: "{{ bundleIdPrefix }}",
+            hasResources: false,
+            dependencies: []
+        ),
+        {% elif framework == "Shared" %}
+        Target.frameworkTarget(
+            name: "Shared",
+            bundleId: "{{ bundleIdPrefix }}",
+            destinations: .iOS,
+            hasResources: true,
+            dependencies: [.target(name: "Core")]
+        ),
+        Target.frameworkTestTarget(
+            name: "Shared",
+            bundleId: "{{ bundleIdPrefix }}",
+            hasResources: false,
+            dependencies: []
+        ),
+        {% else %}
+        Target.frameworkTarget(
+            name: "{{ framework }}",
+            bundleId: "{{ bundleIdPrefix }}",
+            destinations: .iOS,
+            hasResources: false,
+            dependencies: []
+        ),
+        Target.frameworkTestTarget(
+            name: "{{ framework }}",
+            bundleId: "{{ bundleIdPrefix }}",
+            hasResources: false,
+            dependencies: []
+        ),
+        {% endif %}
+        {% endfor %}
+    ]
+)

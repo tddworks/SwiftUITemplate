@@ -1,0 +1,27 @@
+//
+//  Project.swift  
+//  {{ name }} - Multi-App Project
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import ProjectDescription
+import ProjectDescriptionHelpers
+
+let project = WorkspaceFactory.createMultiAppProject(
+    name: "{{ name }}",
+    organizationName: "{{ company }}",
+    bundleIdPrefix: "{{ bundleIdPrefix }}",
+    apps: [
+        {% for app in apps.split(',') %}
+        "{{ app.strip }}",
+        {% endfor %}
+    ],
+    sharedFrameworks: [
+        {% for framework in sharedFrameworks %}
+        "{{ framework }}",
+        {% endfor %}
+    ],
+    version: "{{ version }}"
+)
