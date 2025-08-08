@@ -197,7 +197,7 @@ extension Target {
             name: name,
             destinations: destinations,
             product: extensionType.product,
-            bundleId: "\(bundleId).\(hostApp.lowercased()).\(name.lowercased())",
+            bundleId: "\(bundleId).\(name)",
             infoPlist: .extendingDefault(with: extensionInfoPlist(type: extensionType)),
             sources: [SourcePaths.Extensions.sources(extensionName: name)],
             resources: hasUI ? [SourcePaths.Extensions.resources(extensionName: name)] : nil,
