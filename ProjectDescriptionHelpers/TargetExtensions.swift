@@ -170,12 +170,13 @@ extension Target {
     public static func frameworkTestTarget(
         name: String,
         bundleId: String,
+        destinations: Destinations = .iOS,
         hasResources: Bool = false,
         dependencies: [TargetDependency] = []
     ) -> Target {
         return Target.target(
             name: "\(name)Tests",
-            destinations: .iOS,
+            destinations: destinations,
             product: .unitTests,
             bundleId: "\(bundleId).\(name.lowercased())Tests",
             sources: [SourcePaths.Frameworks.tests(frameworkName: name)],

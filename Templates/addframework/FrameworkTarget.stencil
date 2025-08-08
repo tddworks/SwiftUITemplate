@@ -22,6 +22,7 @@ public enum {{ name }} {
     public static let testTarget = Target.frameworkTestTarget(
         name: "{{ name }}",
         bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
+        destinations: {% if platform == "ios" %}.iOS{% elif platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
         hasResources: false,
         dependencies: []
     )
