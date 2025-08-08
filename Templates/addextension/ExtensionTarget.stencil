@@ -11,7 +11,7 @@ import ProjectDescription
 public enum {{ name }} {
     public static let target = Target.extensionTarget(
         name: "{{ name }}",
-        bundleId: "{{ bundleId }}.{{ hostApp }}.{{ name }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER).{{ name }}",
         extensionType: {% if type == "fileprovider" %}.fileProvider{% elif type == "fileproviderui" %}.fileProviderUI{% else %}.{{ type }}{% endif %},
         destinations: {% if platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
         hostApp: "{{ hostApp }}",
