@@ -46,6 +46,8 @@ let appTemplate = Template(
         ),
         // Generate shared configuration at project root for centralized access
         .file(path: "shared.xcconfig", templatePath: "shared.xcconfig.stencil"),
+        // Generate app entitlements with sandbox support
+        .file(path: "Products/{{ name }}/Resources/{{ name }}.entitlements", templatePath: "AppEntitlements.stencil"),
         // Copy required XCConfig files 
         .file(path: "Products/{{ name }}/Resources/XCConfig/debug.xcconfig", templatePath: .relativeToRoot("Templates/XCConfig/debug.xcconfig")),
         .file(path: "Products/{{ name }}/Resources/XCConfig/release.xcconfig", templatePath: .relativeToRoot("Templates/XCConfig/release.xcconfig")),

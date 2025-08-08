@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    {% if platform == "macos" %}
+    <!-- macOS Sandbox (required for App Store distribution) -->
+    <key>com.apple.security.app-sandbox</key>
+    <true/>
+    {% endif %}
+    <!-- App Groups (for extension communication) -->
+    <key>com.apple.security.application-groups</key>
+    <array>
+        <string>$(DEVELOPMENT_TEAM).group.$(PRODUCT_BUNDLE_IDENTIFIER).{{ name | lowercase }}</string>
+    </array>
+    {% if platform == "macos" %}
+    <!-- File Access Permissions -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+    <key>com.apple.security.files.downloads.read-write</key>
+    <true/>
+    <!-- Network Access -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+    {% endif %}
+    {% if platform == "ios" %}
+    <!-- iOS specific entitlements can go here -->
+    {% endif %}
+</dict>
+</plist>

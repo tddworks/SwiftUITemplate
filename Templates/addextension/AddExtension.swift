@@ -53,11 +53,6 @@ let addExtensionTemplate = Template(
         .file(
             path: "Extensions/{{ name }}/Resources/{{ name }}.entitlements",
             templatePath: "../extension/ExtensionEntitlements.stencil"
-        ),
-        // Auto-create host app entitlements with matching app group
-        .file(
-            path: "Products/{{ hostApp }}/Resources/{{ hostApp }}.entitlements",
-            templatePath: "HostAppEntitlements.stencil"
         )
     ]
 )
