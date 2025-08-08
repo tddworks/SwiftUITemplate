@@ -14,6 +14,9 @@ let addModuleTemplate = Template(
     description: "Adds a new module target to an existing project",
     attributes: [
         .required("name"),
+        .optional("platform", default: "ios"),
+        .optional("hasTests", default: .boolean(true)),
+        .optional("hasResources", default: .boolean(false))
     ],
     items: [
         // Only module-specific files - no Project.swift conflicts

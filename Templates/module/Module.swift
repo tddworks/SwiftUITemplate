@@ -11,6 +11,9 @@ let moduleTemplate = Template(
     description: "Creates a new feature module",
     attributes: [
         .required("name"),
+        .optional("platform", default: "ios"),
+        .optional("hasTests", default: .boolean(true)),
+        .optional("hasResources", default: .boolean(false))
     ],
     items: [
         .directory(path: "Modules/{{ name }}/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),

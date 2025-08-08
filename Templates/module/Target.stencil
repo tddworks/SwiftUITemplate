@@ -11,17 +11,19 @@ public enum {{ name }} {
     public static let target = Target.moduleTarget(
         name: "{{ name }}",
         bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
-        destinations: .iOS,
-        hasResources: true,
+        destinations: {% if platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
+        hasResources: {{ hasResources }},
         dependencies: [
         ]
     )
 
+    {% if hasTests %}
     public static let testTarget = Target.moduleTestTarget(
        name: "{{ name }}",
        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
-       hasResources: true,
+       hasResources: false,
        dependencies: [
        ]
     )
+    {% endif %}
 }

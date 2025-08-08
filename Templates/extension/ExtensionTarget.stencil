@@ -13,7 +13,7 @@ public enum {{ name }} {
         name: "{{ name }}",
         bundleId: "{{ bundleId }}.{{ hostApp }}.{{ name }}",
         extensionType: {% if type == "fileprovider" %}.fileProvider{% elif type == "fileproviderui" %}.fileProviderUI{% else %}.{{ type }}{% endif %},
-        destinations: .iOS,
+        destinations: {% if platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
         hostApp: "{{ hostApp }}",
         version: "{{ version }}",
         hasUI: {{ hasUI }},

@@ -12,7 +12,7 @@ public enum {{ name }} {
     public static let target = Target.frameworkTarget(
         name: "{{ name }}",
         bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
-        destinations: .iOS,
+        destinations: {% if platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
         hasResources: {{ hasResources }},
         isStatic: {{ isStatic }},
         dependencies: [
