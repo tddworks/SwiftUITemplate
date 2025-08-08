@@ -16,7 +16,7 @@ DEVELOPMENT_TEAM = {% if teamId %}{{ teamId }}{% elif team-id %}{{ team-id }}{% 
 // ===== PLATFORM SETTINGS =====
 {% if platform == "macos" %}
 // macOS specific settings
-MACOSX_DEPLOYMENT_TARGET = 11.0
+MACOSX_DEPLOYMENT_TARGET = 12.0
 SUPPORTS_MACCATALYST = NO
 TARGETED_DEVICE_FAMILY = 2
 {% elif platform == "watchos" %}
