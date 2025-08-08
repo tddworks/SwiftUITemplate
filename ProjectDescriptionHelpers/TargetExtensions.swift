@@ -54,7 +54,8 @@ extension Target {
         versionNumber: String = "1.0.0",
         hasResources: Bool = true,
         dependencies: [TargetDependency] = [],
-        additionalInfoPlist: [String : ProjectDescription.Plist.Value] = [:]
+        additionalInfoPlist: [String : ProjectDescription.Plist.Value] = [:],
+        entitlements: Entitlements? = nil
     ) -> [Target] {
         let appTarget = createAppTarget(
             name: name,
@@ -63,7 +64,8 @@ extension Target {
             versionNumber: versionNumber,
             hasResources: hasResources,
             dependencies: dependencies,
-            additionalInfoPlist: additionalInfoPlist
+            additionalInfoPlist: additionalInfoPlist,
+            entitlements: entitlements
         )
         
         let testTarget = createAppTestTarget(
@@ -82,7 +84,8 @@ extension Target {
         versionNumber: String = "1.0.0",
         hasResources: Bool = true,
         dependencies: [TargetDependency] = [],
-        additionalInfoPlist: [String : ProjectDescription.Plist.Value] = [:]
+        additionalInfoPlist: [String : ProjectDescription.Plist.Value] = [:],
+        entitlements: Entitlements? = nil
     ) -> Target {
         return Target.target(
             name: name,
@@ -94,6 +97,7 @@ extension Target {
             ),
             sources: [SourcePaths.Apps.sources(appName: name)],
             resources: hasResources ? [SourcePaths.Apps.resources(appName: name)] : nil,
+            entitlements: entitlements,
             dependencies: dependencies,
             settings: createSettings(name: name, versionNumber: versionNumber, devTeam: "${DEVELOPMENT_TEAM}")
         )

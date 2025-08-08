@@ -31,7 +31,8 @@ public enum {{ name }} {
         ],
         additionalInfoPlist: [{% if platform == "ios" %}
             "NSPhotoLibraryUsageDescription": "{{ name }} requires access to your photo library to save the photo you've edited."
-        {% else %}:]{% endif %}
+        {% else %}:]{% endif %},
+        entitlements: SourcePaths.Apps.entitlements(appName: "{{ name }}")
     )
     
     public static let testTarget = Target.createAppTestTarget(

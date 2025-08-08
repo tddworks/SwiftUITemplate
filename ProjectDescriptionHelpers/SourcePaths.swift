@@ -118,6 +118,11 @@ public enum SourcePaths {
         public static func testResources(appName: String) -> ResourceFileElement {
             return "\(baseAppPath(appName: appName))/TestResources/**"
         }
+        
+        /// Returns the entitlements path for the given app.
+        public static func entitlements(appName: String) -> Entitlements {
+            return .file(path: "\(baseAppPath(appName: appName))/Resources/\(appName).entitlements")
+        }
     }
 }
 
