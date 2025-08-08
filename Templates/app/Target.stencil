@@ -10,33 +10,33 @@ import ProjectDescription
 public enum {{ name }} {
     public static let targets = Target.createAppTargets(
         name: "{{ name }}",
-        bundleId: "{{ bundleId }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
         destinations: {% if platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
         versionNumber: "{{ version }}",
         hasResources: true,
         dependencies: [
         ],
-        additionalInfoPlist: [
-            {% if platform == "ios" %}"NSPhotoLibraryUsageDescription": "{{ name }} requires access to your photo library to save the photo you've edited.",{% endif %}
-        ]
+        additionalInfoPlist: [{% if platform == "ios" %}
+            "NSPhotoLibraryUsageDescription": "{{ name }} requires access to your photo library to save the photo you've edited."
+        {% else %}:]{% endif %}
     )
     
     public static let target = Target.createAppTarget(
         name: "{{ name }}",
-        bundleId: "{{ bundleId }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
         destinations: {% if platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
         versionNumber: "{{ version }}",
         hasResources: true,
         dependencies: [
         ],
-        additionalInfoPlist: [
-            {% if platform == "ios" %}"NSPhotoLibraryUsageDescription": "{{ name }} requires access to your photo library to save the photo you've edited.",{% endif %}
-        ]
+        additionalInfoPlist: [{% if platform == "ios" %}
+            "NSPhotoLibraryUsageDescription": "{{ name }} requires access to your photo library to save the photo you've edited."
+        {% else %}:]{% endif %}
     )
     
     public static let testTarget = Target.createAppTestTarget(
         name: "{{ name }}",
-        bundleId: "{{ bundleId }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
         destinations: {% if platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
         hasResources: true
     )

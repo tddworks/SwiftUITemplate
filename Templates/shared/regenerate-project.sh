@@ -42,8 +42,11 @@ let project = Project(
     settings: .settings(
         base: SettingsDictionary()
             .marketingVersion("1.0")
-            .currentProjectVersion("1")
-            .automaticCodeSigning(devTeam: "")
+            .currentProjectVersion("1"),
+        configurations: [
+            .debug(name: .debug, xcconfig: .relativeToRoot("shared.xcconfig")),
+            .release(name: .release, xcconfig: .relativeToRoot("shared.xcconfig"))
+        ]
     ),
     targets: $APP_NAME.targets + [
 EOF

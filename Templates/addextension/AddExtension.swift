@@ -28,6 +28,7 @@ let addExtensionTemplate = Template(
         .required("type"),
         .required("hostApp"),
         .optional("bundleId", default: "com.example"),
+        .optional("platform", default: "ios"),
         .optional("version", default: "1.0.0"),
         .optional("hasUI", default: .boolean(true))
     ],

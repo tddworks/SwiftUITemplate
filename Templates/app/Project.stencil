@@ -14,8 +14,11 @@ let project = Project(
     settings: .settings(
         base: SettingsDictionary()
             .marketingVersion("1.0")
-            .currentProjectVersion("1")
-            .automaticCodeSigning(devTeam: "{{TEAM_ID}}")
+            .currentProjectVersion("1"),
+        configurations: [
+            .debug(name: .debug, xcconfig: .relativeToRoot("shared.xcconfig")),
+            .release(name: .release, xcconfig: .relativeToRoot("shared.xcconfig"))
+        ]
     ),
     targets: {{ name }}.targets + [
         // Additional targets will be added here by scaffold commands

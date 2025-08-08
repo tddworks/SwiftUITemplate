@@ -1,0 +1,7 @@
+{
+  "bundleId": "{{BUNDLE_ID}}",
+  "teamId": "{{TEAM_ID}}",
+  "projectName": "{{PROJECT_NAME}}",
+  "version": "1.0.0",
+  "organizationName": "{{ORGANIZATION}}"
+}

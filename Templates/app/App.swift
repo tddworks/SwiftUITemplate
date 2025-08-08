@@ -4,12 +4,15 @@ import ProjectDescription
 /// # Usage
 ///
 /// In root of the app, run:
-/// `tuist scaffold app --name MyApp`
+/// `tuist scaffold app --name MyApp --platform ios --bundle-id com.mycompany --team-id ABC123`
 ///
 /// This will create a new app target with SwiftUI support.
 ///
-/// To specify additional options:
-/// `tuist scaffold app --name MyApp --platform ios --author "John Doe" --company "Acme Inc"`
+/// Available options:
+/// - `--platform`: ios, macos, watchos, tvos (default: ios)  
+/// - `--bundle-id`: Base bundle identifier (default: com.example)
+/// - `--team-id`: Development team ID for code signing
+/// - `--version`: App version (default: 1.0.0)
 
 let appTemplate = Template(
     description: "Creates a new iOS/macOS app target with SwiftUI support",
@@ -17,6 +20,8 @@ let appTemplate = Template(
         .required("name"),
         .optional("platform", default: "ios"),
         .optional("bundleId", default: "com.example"),
+        .optional("teamId", default: ""),
+        .optional("team-id", default: ""),
         .optional("version", default: "1.0.0"),
         .optional("hasTests", default: .boolean(true)),
         .optional("hasUITests", default: .boolean(false))
@@ -39,7 +44,12 @@ let appTemplate = Template(
             path: "Products/{{ name }}/Sources/ContentView.swift",
             templatePath: "../Sources/ContentView.stencil"
         ),
-        .directory(path: "Products/{{ name }}/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
+        // Generate shared configuration at project root for centralized access
+        .file(path: "shared.xcconfig", templatePath: "shared.xcconfig.stencil"),
+        // Copy required XCConfig files 
+        .file(path: "Products/{{ name }}/Resources/XCConfig/debug.xcconfig", templatePath: .relativeToRoot("Templates/XCConfig/debug.xcconfig")),
+        .file(path: "Products/{{ name }}/Resources/XCConfig/release.xcconfig", templatePath: .relativeToRoot("Templates/XCConfig/release.xcconfig")),
+        .file(path: "Products/{{ name }}/Resources/XCConfig/XCConfig.swift", templatePath: .relativeToRoot("Templates/XCConfig/XCConfig.swift")),
         .file(
             path: "Products/{{ name }}/Resources/InfoPlist.strings",
             templatePath: "InfoPlist.stencil"

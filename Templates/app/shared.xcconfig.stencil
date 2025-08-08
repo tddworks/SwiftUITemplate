@@ -1,0 +1,42 @@
+//  Created on {{ date }}.
+//  Copyright © {{ year }}. All rights reserved.
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+// ===== PROJECT CONFIGURATION =====
+// Base Bundle Identifier - all targets will append to this
+// Example: com.mycompany → com.mycompany.myapp, com.mycompany.framework, etc.
+PRODUCT_BUNDLE_IDENTIFIER = {{ bundleId }}
+
+// Development Team ID for automatic code signing
+// Get this from Apple Developer Portal → Membership
+DEVELOPMENT_TEAM = {% if teamId %}{{ teamId }}{% elif team-id %}{{ team-id }}{% endif %}
+
+// ===== PLATFORM SETTINGS =====
+{% if platform == "macos" %}
+// macOS specific settings
+MACOSX_DEPLOYMENT_TARGET = 11.0
+SUPPORTS_MACCATALYST = NO
+TARGETED_DEVICE_FAMILY = 2
+{% elif platform == "watchos" %}
+// watchOS specific settings  
+WATCHOS_DEPLOYMENT_TARGET = 8.0
+TARGETED_DEVICE_FAMILY = 4
+{% elif platform == "tvos" %}
+// tvOS specific settings
+TVOS_DEPLOYMENT_TARGET = 15.0
+TARGETED_DEVICE_FAMILY = 3
+{% else %}
+// iOS specific settings
+IPHONEOS_DEPLOYMENT_TARGET = 15.0
+SUPPORTS_MACCATALYST = NO
+TARGETED_DEVICE_FAMILY = 1,2
+{% endif %}
+
+// ===== SHARED BUILD SETTINGS =====
+// Code signing style (Automatic recommended)
+CODE_SIGN_STYLE = Automatic
+
+// Swift version
+SWIFT_VERSION = 5.0
