@@ -19,7 +19,7 @@ public enum ExtensionType: String {
     case intentsUI = "intents-ui"
     case fileProvider = "file-provider"
     case fileProviderUI = "file-provider-ui"
-    
+
     var product: Product {
         switch self {
         case .widget:
@@ -54,7 +54,7 @@ extension Target {
         versionNumber: String = "1.0.0",
         hasResources: Bool = true,
         dependencies: [TargetDependency] = [],
-        additionalInfoPlist: [String : ProjectDescription.Plist.Value] = [:],
+        additionalInfoPlist: [String: ProjectDescription.Plist.Value] = [:],
         entitlements: Entitlements? = nil
     ) -> [Target] {
         let appTarget = createAppTarget(
@@ -67,16 +67,16 @@ extension Target {
             additionalInfoPlist: additionalInfoPlist,
             entitlements: entitlements
         )
-        
+
         let testTarget = createAppTestTarget(
             name: name,
             bundleId: bundleId,
             destinations: destinations
         )
-        
+
         return [appTarget, testTarget]
     }
-    
+
     public static func createAppTarget(
         name: String,
         bundleId: String,
@@ -84,7 +84,7 @@ extension Target {
         versionNumber: String = "1.0.0",
         hasResources: Bool = true,
         dependencies: [TargetDependency] = [],
-        additionalInfoPlist: [String : ProjectDescription.Plist.Value] = [:],
+        additionalInfoPlist: [String: ProjectDescription.Plist.Value] = [:],
         entitlements: Entitlements? = nil
     ) -> Target {
         return Target.target(
@@ -93,16 +93,19 @@ extension Target {
             product: .app,
             bundleId: "\(bundleId).\(name.lowercased())",
             infoPlist: .extendingDefault(
-                with: baseInfoPlist(versionNumber: versionNumber).merging(additionalInfoPlist) { $1 }
+                with: baseInfoPlist(versionNumber: versionNumber).merging(additionalInfoPlist) {
+                    $1
+                }
             ),
             sources: [SourcePaths.Apps.sources(appName: name)],
             resources: hasResources ? [SourcePaths.Apps.resources(appName: name)] : nil,
             entitlements: entitlements,
             dependencies: dependencies,
-            settings: createSettings(name: name, versionNumber: versionNumber, devTeam: "${DEVELOPMENT_TEAM}")
+            settings: createSettings(
+                name: name, versionNumber: versionNumber, devTeam: "${DEVELOPMENT_TEAM}")
         )
     }
-    
+
     public static func createAppTestTarget(
         name: String,
         bundleId: String,
@@ -120,7 +123,7 @@ extension Target {
             dependencies: [.target(name: name)]
         )
     }
-    
+
     public static func moduleTarget(
         name: String,
         bundleId: String,
@@ -141,7 +144,7 @@ extension Target {
                 base: [
                     "DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER": false,
                     "ENABLE_MODULE_VERIFIER": true,
-                    "MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS": ["gnu11", "gnu++14"]
+                    "MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS": ["gnu11", "gnu++14"],
                 ]
             )
         )
@@ -166,7 +169,7 @@ extension Target {
             settings: SettingsFactory.frameworkSettings(usesMaxSwiftVersion: true)
         )
     }
-    
+
     public static func frameworkTestTarget(
         name: String,
         bundleId: String,
@@ -180,14 +183,15 @@ extension Target {
             product: .unitTests,
             bundleId: "\(bundleId).\(name.lowercased())Tests",
             sources: [SourcePaths.Frameworks.tests(frameworkName: name)],
-            resources: hasResources ? [SourcePaths.Frameworks.testResources(frameworkName: name)] : nil,
+            resources: hasResources
+                ? [SourcePaths.Frameworks.testResources(frameworkName: name)] : nil,
             dependencies: [
-                .target(name: name),
+                .target(name: name)
             ] + dependencies,
             settings: SettingsFactory.testSettings()
         )
     }
-    
+
     public static func extensionTarget(
         name: String,
         bundleId: String,
@@ -211,7 +215,7 @@ extension Target {
             settings: SettingsFactory.extensionSettings()
         )
     }
-    
+
     public static func moduleTestTarget(
         name: String,
         bundleId: String,
@@ -226,17 +230,19 @@ extension Target {
             sources: [SourcePaths.Modules.tests(moduleName: name)],
             resources: hasResources ? [SourcePaths.Modules.testResources(moduleName: name)] : nil,
             dependencies: [
-                .target(name: "\(name)"),
+                .target(name: "\(name)")
             ] + dependencies,
             settings: .settings(
                 base: [:]
             )
         )
     }
-    
+
     // https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleversion
     // The tl;dr is that CFBudnleShortVersion is your app version, as we understand it, and CFBundleVersion is a build number for the system to differentiate builds of the same version
-    private static func baseInfoPlist(versionNumber: String) -> [String: ProjectDescription.Plist.Value] {
+    private static func baseInfoPlist(versionNumber: String) -> [String: ProjectDescription.Plist
+        .Value]
+    {
         return [
             "UILaunchScreen": ["UIColorName": "AccentColor"],
             "LSApplicationCategoryType": "public.app-category.utilities",
@@ -247,20 +253,24 @@ extension Target {
             "CFBundleVersion": "1",
         ]
     }
-    
+
     // https://developer.apple.com/documentation/xcode/build-settings-reference#Marketing-Version
     private static func createSettings(
         name: String,
         versionNumber: String,
         devTeam: String
     ) -> Settings {
-        let configurations: [Configuration] =  [
-            .debug(name: .debug,
-                    settings: ["OTHER_SWIFT_FLAGS": "-DDEBUG"],
-                    xcconfig: "\(SourcePaths.Apps.appResourcesPath(appName: name))/XCConfig/debug.xcconfig"),
-            .release(name: .release, xcconfig: "\(SourcePaths.Apps.appResourcesPath(appName: name))/XCConfig/release.xcconfig"),
+        let configurations: [Configuration] = [
+            .debug(
+                name: .debug,
+                xcconfig:
+                    "\(SourcePaths.Apps.appResourcesPath(appName: name))/XCConfig/debug.xcconfig"),
+            .release(
+                name: .release,
+                xcconfig:
+                    "\(SourcePaths.Apps.appResourcesPath(appName: name))/XCConfig/release.xcconfig"),
         ]
-        
+
         let baseSettings = SettingsDictionary()
             .codeSignIdentityAppleDevelopment()
             .automaticCodeSigning(devTeam: devTeam)
@@ -268,17 +278,17 @@ extension Target {
             .currentProjectVersion("1")
             //MARKETING_VERSION (CFBundleShortVersionString in Info.plist)
             .marketingVersion(versionNumber)
-        return .settings(base: baseSettings.merging(["OTHER_LDFLAGS": "$(inherited) -ObjC"]), configurations: configurations, defaultSettings: .recommended)
+            return .settings(base: baseSettings.merging(["OTHER_LDFLAGS": "$(inherited) -ObjC"]), configurations: configurations, defaultSettings: .recommended)
     }
-    
+
     // MARK: - Private Helpers
-    
+
     private static func extensionInfoPlist(type: ExtensionType) -> [String: Plist.Value] {
         var plist: [String: Plist.Value] = [
             "CFBundleDisplayName": "$(PRODUCT_NAME)",
-            "NSExtension": [:]
+            "NSExtension": [:],
         ]
-        
+
         switch type {
         case .widget:
             plist["NSExtension"] = [
@@ -287,7 +297,7 @@ extension Target {
         case .notification:
             plist["NSExtension"] = [
                 "NSExtensionPointIdentifier": "com.apple.usernotifications.service",
-                "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).NotificationService"
+                "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).NotificationService",
             ]
         case .action:
             plist["NSExtension"] = [
@@ -312,16 +322,16 @@ extension Target {
         case .fileProvider:
             plist["NSExtension"] = [
                 "NSExtensionPointIdentifier": "com.apple.fileprovider-nonui",
-                "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).FileProviderExtension"
+                "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).FileProviderExtension",
             ]
         case .fileProviderUI:
             plist["NSExtension"] = [
                 "NSExtensionPointIdentifier": "com.apple.fileprovider-actionsui",
                 "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).FileProviderUIExtension",
-                "NSExtensionActivationRule": "TRUEPREDICATE"
+                "NSExtensionActivationRule": "TRUEPREDICATE",
             ]
         }
-        
+
         return plist
     }
 }
