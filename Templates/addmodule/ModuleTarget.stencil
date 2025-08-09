@@ -1,8 +1,9 @@
 //
-//  Target.stencil
-//  SwiftUITemplate
+//  {{ name }}.swift
+//  Target definition for {{ name }} module
 //
-//  Created by hanrenwei on 3/25/25.
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
 //
 
 import ProjectDescription

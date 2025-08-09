@@ -1,0 +1,17 @@
+//
+//  {{ name }}.swift
+//  {{ name }}
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import Foundation
+
+public struct {{ name }} {
+    public init() {}
+    
+    public func doSomething() -> String {
+        return "Hello from {{ name }} framework!"
+    }
+}

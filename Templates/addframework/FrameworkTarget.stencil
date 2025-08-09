@@ -1,0 +1,37 @@
+//
+//  {{ name }}.swift
+//  Target definition for {{ name }} framework
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import ProjectDescription
+
+public enum {{ name }} {
+    public static let target = Target.frameworkTarget(
+        name: "{{ name }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
+        destinations: {% if platform == "ios" %}.iOS{% elif platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
+        hasResources: {{ hasResources }},
+        isStatic: {{ isStatic }},
+        dependencies: [
+        ]
+    )
+    
+    public static let testTarget = Target.frameworkTestTarget(
+        name: "{{ name }}",
+        bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
+        destinations: {% if platform == "ios" %}.iOS{% elif platform == "macos" %}.macOS{% elif platform == "watchos" %}.watchOS{% elif platform == "tvos" %}.tvOS{% else %}.iOS{% endif %},
+        hasResources: false,
+        dependencies: []
+    )
+    
+    public static var targets: [Target] {
+        var result = [target]
+        {% if hasTests %}
+        result.append(testTarget)
+        {% endif %}
+        return result
+    }
+}

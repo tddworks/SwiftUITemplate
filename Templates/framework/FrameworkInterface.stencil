@@ -1,0 +1,14 @@
+//
+//  {{ name }}Interface.swift
+//  {{ name }}
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import Foundation
+
+/// Public interface for {{ name }} framework
+public protocol {{ name }}Interface {
+    func doSomething() -> String
+}

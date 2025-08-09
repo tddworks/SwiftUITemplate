@@ -1,11 +1,29 @@
-//  Created by hanrenwei on 1/22/25.
-//  Copyright © 2025 onegai.com. All rights reserved.
+//  Created by SwiftUITemplate Framework
+//  Copyright © 2025. All rights reserved.
 
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
-// https://nshipster.com/secrets/
-// https://github.com/depromeet/14th-team5-iOS/blob/develop/14th-team5-iOS/XCConfig/hidden.xcconfig
-// https://medium.com/@gizemturker/ensuring-security-for-secrets-in-ios-app-ff4a25c533a1
 
+// ===== PROJECT CONFIGURATION =====
+// Base Bundle Identifier - all targets will append to this
+// Set this when creating the initial app: tuist scaffold app --bundle-id com.mycompany
+// Example: com.mycompany → com.mycompany.myapp, com.mycompany.framework, etc.
 PRODUCT_BUNDLE_IDENTIFIER = com.example
-DEVELOPMENT_TEAM = Y5856NSDZU
+
+// Development Team ID for automatic code signing
+// Get this from Apple Developer Portal → Membership
+// Set this when creating the initial app: tuist scaffold app --team-id ABC123XYZ
+DEVELOPMENT_TEAM = 
+
+// ===== SHARED BUILD SETTINGS =====
+// Code signing style (Automatic recommended)
+CODE_SIGN_STYLE = Automatic
+
+// Swift version
+SWIFT_VERSION = 5.0
+
+// Common deployment targets (override in platform-specific configs if needed)
+IPHONEOS_DEPLOYMENT_TARGET = 15.0
+MACOSX_DEPLOYMENT_TARGET = 12.0
+WATCHOS_DEPLOYMENT_TARGET = 8.0
+TVOS_DEPLOYMENT_TARGET = 15.0

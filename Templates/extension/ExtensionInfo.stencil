@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDisplayName</key>
+    <string>{{ name }}</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key>
+    <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+    <key>CFBundleShortVersionString</key>
+    <string>{{ version }}</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    {% if type == "fileprovider" %}
+    <key>NSExtension</key>
+    <dict>
+        <key>NSExtensionFileProviderSupportsEnumeration</key>
+        <true/>
+        <key>NSExtensionFileProviderDocumentGroup</key>
+        <string>{{ hostApp }}</string>
+        <key>NSExtensionPointIdentifier</key>
+        <string>com.apple.fileprovider-nonui</string>
+        <key>NSExtensionPrincipalClass</key>
+        <string>$(PRODUCT_MODULE_NAME).FileProviderExtension</string>
+        <key>NSExtensionFileProviderActions</key>
+        <dict>
+            <key>com.example.customAction</key>
+            <dict>
+                <key>NSExtensionFileProviderActionIdentifier</key>
+                <string>com.example.customAction</string>
+                <key>NSExtensionFileProviderActionName</key>
+                <string>Custom Action</string>
+            </dict>
+        </dict>
+    </dict>
+    {% elif type == "fileproviderui" %}
+    <key>NSExtension</key>
+    <dict>
+        <key>NSExtensionPointIdentifier</key>
+        <string>com.apple.fileprovider-actionsui</string>
+        <key>NSExtensionPrincipalClass</key>
+        <string>$(PRODUCT_MODULE_NAME).FileProviderUIExtension</string>
+        <key>NSExtensionActivationRule</key>
+        <string>TRUEPREDICATE</string>
+    </dict>
+    {% else %}
+    <key>NSExtension</key>
+    <dict>
+        <key>NSExtensionPointIdentifier</key>
+        <string>com.apple.{{ type }}-extension</string>
+        <key>NSExtensionPrincipalClass</key>
+        <string>$(PRODUCT_MODULE_NAME).{{ name }}</string>
+    </dict>
+    {% endif %}
+</dict>
+</plist>

@@ -1,0 +1,27 @@
+//
+//  {{ name }}View.swift
+//  {{ name }}
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import SwiftUI
+
+struct {{ name }}View: View {
+    var body: some View {
+        VStack {
+            Image(systemName: "globe")
+                .imageScale(.large)
+                .foregroundColor(.accentColor)
+            Text("{{ name }} Extension")
+        }
+        .padding()
+    }
+}
+
+struct {{ name }}View_Previews: PreviewProvider {
+    static var previews: some View {
+        {{ name }}View()
+    }
+}

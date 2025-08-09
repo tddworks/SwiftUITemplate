@@ -1,0 +1,124 @@
+//
+//  {{ name }}UI.swift
+//  {{ name }}
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import FileProviderUI
+import SwiftUI
+
+class FileProviderUIExtension: FPUIActionExtensionViewController {
+    
+    override func prepare(forAction actionIdentifier: String, itemIdentifiers: [NSFileProviderItemIdentifier]) {
+        // Prepare the view controller for the requested action
+        
+        // Configure UI based on action
+        switch actionIdentifier {
+        case "com.example.customAction":
+            setupCustomActionUI()
+        default:
+            // Handle other actions
+            break
+        }
+    }
+    
+    override func prepare(forError error: Error) {
+        // Handle error preparation
+        showError(error)
+    }
+    
+    override var nibName: NSNib.Name? {
+        return nil
+    }
+    
+    override func loadView() {
+        // Create SwiftUI view
+        let hostingController = NSHostingController(rootView: FileProviderActionView())
+        self.view = hostingController.view
+        self.addChild(hostingController)
+    }
+    
+    // MARK: - Private Methods
+    
+    private func setupCustomActionUI() {
+        // Configure UI for custom action
+    }
+    
+    private func showError(_ error: Error) {
+        // Display error in UI
+    }
+}
+
+// MARK: - SwiftUI View
+
+struct FileProviderActionView: View {
+    @State private var isProcessing = false
+    @State private var statusMessage = "Ready to perform action"
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "doc.fill")
+                .font(.largeTitle)
+                .foregroundColor(.accentColor)
+            
+            Text("{{ name }} Action")
+                .font(.headline)
+            
+            Text(statusMessage)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            
+            HStack(spacing: 16) {
+                Button("Cancel") {
+                    // Handle cancel
+                    NotificationCenter.default.post(name: .fpActionCancel, object: nil)
+                }
+                .keyboardShortcut(.escape)
+                
+                Button("Perform Action") {
+                    performAction()
+                }
+                .keyboardShortcut(.return)
+                .disabled(isProcessing)
+            }
+            
+            if isProcessing {
+                ProgressView()
+                    .progressViewStyle(.linear)
+            }
+        }
+        .padding(20)
+        .frame(width: 400, height: 200)
+    }
+    
+    private func performAction() {
+        isProcessing = true
+        statusMessage = "Processing..."
+        
+        // Simulate async action
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            isProcessing = false
+            statusMessage = "Action completed successfully"
+            
+            // Notify completion
+            NotificationCenter.default.post(name: .fpActionComplete, object: nil)
+        }
+    }
+}
+
+// MARK: - Notification Names
+
+extension Notification.Name {
+    static let fpActionComplete = Notification.Name("FileProviderActionComplete")
+    static let fpActionCancel = Notification.Name("FileProviderActionCancel")
+}
+
+// MARK: - Preview
+
+struct FileProviderActionView_Previews: PreviewProvider {
+    static var previews: some View {
+        FileProviderActionView()
+    }
+}

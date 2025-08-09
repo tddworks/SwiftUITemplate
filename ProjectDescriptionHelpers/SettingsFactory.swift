@@ -31,4 +31,23 @@ public enum SettingsFactory {
     public static func testSettings() -> Settings {
         .settings(base: ["SWIFT_VERSION": "$(SWIFT_MAX_VERSION)"])
     }
+    
+    public static func extensionSettings() -> Settings {
+        .settings(
+            base: [
+                "SKIP_INSTALL": true,
+                "ENABLE_MODULE_VERIFIER": true,
+                "MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS": ["gnu11", "gnu++14"]
+            ]
+        )
+    }
+    
+    public static func appSettingsWithVersion(version: String, devTeam: String = "$(DEVELOPMENT_TEAM)") -> Settings {
+        let baseSettings = SettingsDictionary()
+            .codeSignIdentityAppleDevelopment()
+            .automaticCodeSigning(devTeam: devTeam)
+            .currentProjectVersion("1")
+            .marketingVersion(version)
+        return .settings(base: baseSettings, defaultSettings: .recommended)
+    }
 }

@@ -1,0 +1,22 @@
+//
+//  Project.swift
+//  {{ name }} - App Project
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import ProjectDescription
+import ProjectDescriptionHelpers
+
+let project = WorkspaceFactory.createAppProject(
+    appName: "{{ name }}",
+    organizationName: "{{ company }}",
+    bundleIdPrefix: "{{ bundleIdPrefix }}",
+    version: "{{ version }}",
+    dependencies: [
+        {% for dependency in sharedDependencies %}
+        "{{ dependency }}",
+        {% endfor %}
+    ]
+)

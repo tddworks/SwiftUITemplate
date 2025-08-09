@@ -96,5 +96,6 @@ public enum ProjectFactory {
             $0.name.hasSuffix("Tests") ? nil : .target(name: $0.name)
         }
     }
+    
 }
 

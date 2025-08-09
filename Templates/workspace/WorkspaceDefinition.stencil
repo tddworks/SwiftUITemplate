@@ -1,0 +1,20 @@
+//
+//  Workspace.swift
+//  {{ name }} Workspace
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import ProjectDescription
+import ProjectDescriptionHelpers
+
+let workspace = WorkspaceFactory.createWorkspace(
+    name: "{{ name }}",
+    projects: [
+        {% for app in apps.split(',') %}
+        "{{ app.strip }}",
+        {% endfor %}
+        "Shared"
+    ]
+)

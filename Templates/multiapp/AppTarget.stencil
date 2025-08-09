@@ -1,0 +1,45 @@
+//
+//  {{ name }}.swift
+//  Target definition for {{ name }} app
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import ProjectDescription
+
+public enum {{ name }} {
+    public static let target = Target.createAppTarget(
+        name: "{{ name }}",
+        bundleId: "{{ bundleIdPrefix }}",
+        destinations: .iOS,
+        versionNumber: "{{ version }}",
+        hasResources: true,
+        dependencies: [
+            {% for dependency in sharedDependencies %}
+            .project(target: "{{ dependency }}", path: "../Shared"),
+            {% endfor %}
+        ],
+        additionalInfoPlist: [
+            "CFBundleDisplayName": "{{ name }}",
+            "LSApplicationCategoryType": "public.app-category.utilities"
+        ]
+    )
+    
+    {% if hasTests %}
+    public static let testTarget = Target.createAppTestTarget(
+        name: "{{ name }}",
+        bundleId: "{{ bundleIdPrefix }}",
+        destinations: .iOS,
+        hasResources: false
+    )
+    
+    public static var targets: [Target] {
+        return [target, testTarget]
+    }
+    {% else %}
+    public static var targets: [Target] {
+        return [target]
+    }
+    {% endif %}
+}

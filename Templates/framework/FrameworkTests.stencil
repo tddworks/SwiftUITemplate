@@ -1,0 +1,25 @@
+//
+//  {{ name }}Tests.swift
+//  {{ name }}Tests
+//
+//  Created by {{ author }} on {{ date }}.
+//  Copyright © {{ year }} {{ company }}. All rights reserved.
+//
+
+import XCTest
+@testable import {{ name }}
+
+final class {{ name }}Tests: XCTestCase {
+    
+    func testExample() throws {
+        let sut = {{ name }}()
+        let result = sut.doSomething()
+        XCTAssertEqual(result, "Hello from {{ name }} framework!")
+    }
+    
+    func testPerformanceExample() throws {
+        self.measure {
+            _ = {{ name }}().doSomething()
+        }
+    }
+}

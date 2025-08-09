@@ -1,104 +1,75 @@
 import Foundation
 import ProjectDescription
 
-
 /// # Usage
 ///
 /// In root of the app, run:
-/// `tuist scaffold app --name MyApp`
+/// `tuist scaffold app --name MyApp --platform ios --bundle-id com.mycompany --team-id ABC123`
 ///
-/// This will create a new Feature project named `MyProject` under `Modules/` for platforms `macOS` by default.
+/// This will create a new app target with SwiftUI support.
 ///
-/// To specify a platform add the `--platforms` attribute as follows:
-/// `tuist scaffold feature --name NewApp --platforms iOS`
-
-let appName: Template.Attribute = .required("name")
-
-let projectPath = "."
-
-let productsPath  = "Products"
-
-let defaultAuthor: String = {
-    let arguments = ["config", "user.name"]
-
-    // shell will return output with trailing \n
-    let output = executeCommand(command: "/usr/bin/git", args: arguments).trimmingCharacters(in: .whitespacesAndNewlines)
-
-    // if no git repo, we just get the system's user name
-    return output != "" ? output : NSUserName()
-}()
-
-let defaultYear: String = {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy"
-    return dateFormatter.string(from: Date())
-}()
-
-let defaultDate: String = {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "dd/MM/yyyy"
-    return dateFormatter.string(from: Date())
-}()
-
-let yearAttribute: Template.Attribute = .optional("year", default: .string(defaultYear))
-let dateAttribute: Template.Attribute = .optional("date", default: .string(defaultDate))
-
-let authorAttribute: Template.Attribute = .optional("author", default: .string(defaultAuthor))
-
-let companyAttribute: Template.Attribute = .optional("company", default: .string(""))
+/// Available options:
+/// - `--platform`: ios, macos, watchos, tvos (default: ios)  
+/// - `--bundle-id`: Base bundle identifier (default: com.example)
+/// - `--team-id`: Development team ID for code signing
+/// - `--version`: App version (default: 1.0.0)
 
 let appTemplate = Template(
-    description: "New App template",
+    description: "Creates a new iOS/macOS app target with SwiftUI support",
     attributes: [
-        appName,
+        .required("name"),
         .optional("platform", default: "ios"),
+        .optional("bundleId", default: "com.example"),
+        .optional("teamId", default: ""),
+        .optional("team-id", default: ""),
+        .optional("version", default: "1.0.0"),
+        .optional("hasTests", default: .boolean(true)),
+        .optional("hasUITests", default: .boolean(false))
     ],
     items: [
+        // Project structure (only created if not exists)
         .directory(path: "Tuist", sourcePath: "../../ProjectDescriptionHelpers"),
-        .directory(path: "\(productsPath )/\(appName)/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
-        .file(path: "./Project.swift",
-              templatePath: "Project.stencil"),
+        .file(path: "./Project.swift", templatePath: "Project.stencil"),  
+        .file(path: "./Package.swift", templatePath: "Package.stencil"),
+        // App-specific files (always created)
         .file(
-               path: projectPath + "/Package.swift",
-               templatePath: "Package.stencil"
-           ),
-        .file(
-            path: "Tuist/ProjectDescriptionHelpers/Targets/Products/\(appName).swift",
-            templatePath: "target.stencil"
+            path: "Tuist/ProjectDescriptionHelpers/Targets/Products/{{ name }}.swift",
+            templatePath: "Target.stencil"
         ),
         .file(
-             path: "\(productsPath )/\(appName)/Sources/\(appName)App.swift",
-             templatePath: "../Sources/App.stencil"
-         ),
+            path: "Products/{{ name }}/Sources/{{ name }}App.swift",
+            templatePath: "../Sources/App.stencil"
+        ),
         .file(
-             path: "\(productsPath )/\(appName)/Sources/ContentView.swift",
-             templatePath: "../Sources/ContentView.stencil"
-         ),
+            path: "Products/{{ name }}/Sources/ContentView.swift",
+            templatePath: "../Sources/ContentView.stencil"
+        ),
+        // Generate shared configuration at project root for centralized access
+        .file(path: "shared.xcconfig", templatePath: "shared.xcconfig.stencil"),
+        // Generate app entitlements with sandbox support
+        .file(path: "Products/{{ name }}/Resources/{{ name }}.entitlements", templatePath: "AppEntitlements.stencil"),
+        // Copy required XCConfig files 
+        .file(path: "Products/{{ name }}/Resources/XCConfig/debug.xcconfig", templatePath: .relativeToRoot("Templates/XCConfig/debug.xcconfig")),
+        .file(path: "Products/{{ name }}/Resources/XCConfig/release.xcconfig", templatePath: .relativeToRoot("Templates/XCConfig/release.xcconfig")),
+        .file(path: "Products/{{ name }}/Resources/XCConfig/XCConfig.swift", templatePath: .relativeToRoot("Templates/XCConfig/XCConfig.swift")),
         .file(
-            path: "\(productsPath )/\(appName)/Resources/InfoPlist.strings",
+            path: "Products/{{ name }}/Resources/InfoPlist.strings",
             templatePath: "InfoPlist.stencil"
         ),
         .file(
-             path: "\(productsPath )/\(appName)/TestsSources/\(appName)Tests.swift",
-             templatePath: "../TestSources/Tests.stencil"
-         ),
+            path: "Products/{{ name }}/TestsSources/{{ name }}Tests.swift",
+            templatePath: "../Sources/Tests.stencil"
+        ),
+        .string(path: "Products/{{ name }}/Resources/.gitkeep", contents: ""),
+        .string(path: "Products/{{ name }}/TestResources/.gitkeep", contents: ""),
         .file(
-             path: "\(productsPath )/\(appName)/TestResources/InfoPlist.strings",
-             templatePath: "../Sources/ContentView.stencil"
-         ),
+            path: "regenerate-project.sh",
+            templatePath: .relativeToRoot("Templates/shared/regenerate-project.sh")
+        ),
+        .string(
+            path: "PROJECT_GUIDE.md",
+            contents: "# {{ name }} - Project Guide\n\n## 🔄 Automatic Project Updates\n\nAfter scaffolding new targets (modules, frameworks, extensions, or apps), run:\n\n```bash\nbash regenerate-project.sh\ntuist generate\n```\n\nThis will automatically update Project.swift to include all scaffolded targets.\n\n## Adding Components\n\n```bash\n# Add a module\ntuist scaffold addmodule --name UserProfile\n\n# Add a framework\ntuist scaffold addframework --name Core\n\n# Add an extension\ntuist scaffold addextension --name MyWidget --type widget --host-app {{ name }}\n\n# Add another app\ntuist scaffold addapp --name CompanionApp --platform macos\n\n# After adding any components, regenerate:\nbash regenerate-project.sh\ntuist generate\n```\n\n## Project Structure\n\n```\n{{ name }}/\n├── Products/          # App targets\n├── Modules/           # Feature modules\n├── Frameworks/        # Shared frameworks\n├── Extensions/        # App extensions\n├── Tuist/            # Tuist configuration\n├── Project.swift     # Project definition (auto-generated)\n└── regenerate-project.sh  # Script to update Project.swift\n```"
+        )
     ]
 )
 
-func executeCommand(command: String, args: [String]) -> String {
-    let task = Process()
-    task.launchPath = command
-    task.arguments = args
-    let pipe = Pipe()
-
-    task.standardOutput = pipe
-    task.launch()
-
-    let data = pipe.fileHandleForReading.readDataToEndOfFile()
-    let output = String(decoding: data, as: UTF8.self)
-    return output
-}

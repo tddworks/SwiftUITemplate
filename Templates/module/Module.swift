@@ -7,23 +7,23 @@
 
 import ProjectDescription
 
-let moduleName: Template.Attribute = .required("name")
-let modulesPath  = "Modules"
-
 let moduleTemplate = Template(
-    description: "New Module Template",
+    description: "Creates a new feature module",
     attributes: [
-        moduleName,
+        .required("name"),
+        .optional("platform", default: "ios"),
+        .optional("hasTests", default: .boolean(true)),
+        .optional("hasResources", default: .boolean(false))
     ],
     items: [
-        .directory(path: "\(modulesPath)/\(moduleName)/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
+        .directory(path: "Modules/{{ name }}/Resources", sourcePath: .relativeToRoot("Templates/XCConfig")),
         .string(
-            path: "\(modulesPath)/\(moduleName)/Sources/\(moduleName).swift",
+            path: "Modules/{{ name }}/Sources/{{ name }}.swift",
             contents: "import Foundation"
         ),
         .file(
-            path: "Tuist/ProjectDescriptionHelpers/Targets/\(modulesPath)/\(moduleName).swift",
-            templatePath: "target.stencil"
+            path: "Tuist/ProjectDescriptionHelpers/Targets/Modules/{{ name }}.swift",
+            templatePath: "Target.stencil"
         ),
     ]
 )
