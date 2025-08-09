@@ -207,7 +207,7 @@ extension Target {
             destinations: destinations,
             product: extensionType.product,
             bundleId: bundleId,
-            infoPlist: .extendingDefault(with: extensionInfoPlist(type: extensionType)),
+            infoPlist: SourcePaths.Extensions.infoPlist(extensionName: name),
             sources: [SourcePaths.Extensions.sources(extensionName: name)],
             resources: hasUI ? [SourcePaths.Extensions.resources(extensionName: name)] : nil,
             entitlements: SourcePaths.Extensions.entitlements(extensionName: name),
@@ -279,59 +279,5 @@ extension Target {
             //MARKETING_VERSION (CFBundleShortVersionString in Info.plist)
             .marketingVersion(versionNumber)
             return .settings(base: baseSettings.merging(["OTHER_LDFLAGS": "$(inherited) -ObjC"]), configurations: configurations, defaultSettings: .recommended)
-    }
-
-    // MARK: - Private Helpers
-
-    private static func extensionInfoPlist(type: ExtensionType) -> [String: Plist.Value] {
-        var plist: [String: Plist.Value] = [
-            "CFBundleDisplayName": "$(PRODUCT_NAME)",
-            "NSExtension": [:],
-        ]
-
-        switch type {
-        case .widget:
-            plist["NSExtension"] = [
-                "NSExtensionPointIdentifier": "com.apple.widgetkit-extension"
-            ]
-        case .notification:
-            plist["NSExtension"] = [
-                "NSExtensionPointIdentifier": "com.apple.usernotifications.service",
-                "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).NotificationService",
-            ]
-        case .action:
-            plist["NSExtension"] = [
-                "NSExtensionPointIdentifier": "com.apple.ui-services"
-            ]
-        case .share:
-            plist["NSExtension"] = [
-                "NSExtensionPointIdentifier": "com.apple.share-services"
-            ]
-        case .today:
-            plist["NSExtension"] = [
-                "NSExtensionPointIdentifier": "com.apple.widget-extension"
-            ]
-        case .intents:
-            plist["NSExtension"] = [
-                "NSExtensionPointIdentifier": "com.apple.intents-service"
-            ]
-        case .intentsUI:
-            plist["NSExtension"] = [
-                "NSExtensionPointIdentifier": "com.apple.intents-ui-service"
-            ]
-        case .fileProvider:
-            plist["NSExtension"] = [
-                "NSExtensionPointIdentifier": "com.apple.fileprovider-nonui",
-                "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).FileProviderExtension",
-            ]
-        case .fileProviderUI:
-            plist["NSExtension"] = [
-                "NSExtensionPointIdentifier": "com.apple.fileprovider-actionsui",
-                "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).FileProviderUIExtension",
-                "NSExtensionActivationRule": "TRUEPREDICATE",
-            ]
-        }
-
-        return plist
     }
 }

@@ -24,7 +24,7 @@
         <key>NSExtensionFileProviderSupportsEnumeration</key>
         <true/>
         <key>NSExtensionFileProviderDocumentGroup</key>
-        <string>$(TeamIdentifierPrefix)group.$(PRODUCT_BUNDLE_IDENTIFIER).{{ hostApp | lowercase }}</string>
+        <string>$(TeamIdentifierPrefix)group.$(BASE_BUNDLE_IDENTIFIER).{{ hostApp | lowercase }}</string>
         <key>NSExtensionPointIdentifier</key>
         <string>com.apple.fileprovider-nonui</string>
         <key>NSExtensionPrincipalClass</key>
