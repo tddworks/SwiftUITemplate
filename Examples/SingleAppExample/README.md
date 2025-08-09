@@ -2,7 +2,7 @@
 
 ```bash
 # 1. Create the main app and project structure
-tuist scaffold app --name MyApp --platform ios --bundle-id com.mycompany
+tuist scaffold app --name MyApp --platform ios --bundle-id com.mycompany --team-id yourteamid
 
 # 2. Generate initial project
 tuist generate
