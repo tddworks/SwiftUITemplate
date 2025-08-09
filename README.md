@@ -24,7 +24,7 @@ import ProjectDescription
 
 let tuist = Tuist(
     project: .tuist(plugins: [
-        .git(url: "https://github.com/tddworks/SwiftUITemplate", tag: "v1.0.1")
+        .git(url: "https://github.com/tddworks/SwiftUITemplate", tag: "v1.1.0")
     ])
 )
 ```
@@ -44,13 +44,14 @@ The addition templates are safer as they never overwrite existing project config
 Generate a new SwiftUI application:
 
 ```sh
-tuist scaffold app --name MyApp --platform ios --bundle-id com.example --version 1.0.0
+tuist scaffold app --name MyApp --platform ios --bundle-id com.example --team-id ABC123XYZ --version 1.0.0
 ```
 
 **Options:**
 - `name` (required): App name
 - `platform`: Target platform (ios/macos)
 - `bundle-id`: Bundle identifier prefix
+- `team-id`: Development team ID for code signing
 - `version`: App version
 - `has-tests`: Include test target (default: true)
 - `has-ui-tests`: Include UI test target (default: false)
@@ -260,7 +261,7 @@ tuist scaffold multiapp --name NewApp --workspace MyWorkspace
 
 ```bash
 # 1. Create the main app and project structure
-tuist scaffold app --name MyApp --platform ios --bundle-id com.mycompany
+tuist scaffold app --name MyApp --platform ios --bundle-id com.mycompany --team-id ABC123XYZ
 
 # 2. Generate initial project
 tuist generate
