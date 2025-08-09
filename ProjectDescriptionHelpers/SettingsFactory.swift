@@ -14,6 +14,7 @@ public enum SettingsFactory {
             .automaticCodeSigning(devTeam: config.devTeam)
             .marketingVersion(config.versionNumber)
             .currentProjectVersion("Auto generated")
+            .merging(["ENABLE_HARDENED_RUNTIME": "YES"])
         return .settings(base: base, defaultSettings: .recommended)
     }
     
@@ -49,6 +50,7 @@ public enum SettingsFactory {
             .automaticCodeSigning(devTeam: devTeam)
             .currentProjectVersion("1")
             .marketingVersion(version)
+            .merging(["ENABLE_HARDENED_RUNTIME": "YES"])
         return .settings(base: baseSettings, defaultSettings: .recommended)
     }
 }
