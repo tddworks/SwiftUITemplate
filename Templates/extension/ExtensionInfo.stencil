@@ -24,17 +24,17 @@
         <key>NSExtensionFileProviderSupportsEnumeration</key>
         <true/>
         <key>NSExtensionFileProviderDocumentGroup</key>
-        <string>{{ hostApp }}</string>
+        <string>$(TeamIdentifierPrefix)group.$(PRODUCT_BUNDLE_IDENTIFIER).{{ hostApp | lowercase }}</string>
         <key>NSExtensionPointIdentifier</key>
         <string>com.apple.fileprovider-nonui</string>
         <key>NSExtensionPrincipalClass</key>
         <string>$(PRODUCT_MODULE_NAME).FileProviderExtension</string>
         <key>NSExtensionFileProviderActions</key>
         <dict>
-            <key>com.example.customAction</key>
+            <key>$(PRODUCT_BUNDLE_IDENTIFIER).customAction</key>
             <dict>
                 <key>NSExtensionFileProviderActionIdentifier</key>
-                <string>com.example.customAction</string>
+                <string>$(PRODUCT_BUNDLE_IDENTIFIER).customAction</string>
                 <key>NSExtensionFileProviderActionName</key>
                 <string>Custom Action</string>
             </dict>
