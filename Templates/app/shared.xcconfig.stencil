@@ -7,7 +7,8 @@
 // ===== PROJECT CONFIGURATION =====
 // Base Bundle Identifier - all targets will append to this
 // Example: com.mycompany → com.mycompany.myapp, com.mycompany.framework, etc.
-PRODUCT_BUNDLE_IDENTIFIER = {{ bundleId }}
+BASE_BUNDLE_IDENTIFIER = {{ bundleId }}
+PRODUCT_BUNDLE_IDENTIFIER = $(BASE_BUNDLE_IDENTIFIER)
 
 // Development Team ID for automatic code signing
 // Get this from Apple Developer Portal → Membership

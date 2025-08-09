@@ -10,7 +10,7 @@
     <!-- App Groups (for extension communication) -->
     <key>com.apple.security.application-groups</key>
     <array>
-        <string>$(TeamIdentifierPrefix)group.$(PRODUCT_BUNDLE_IDENTIFIER).{{ name | lowercase }}</string>
+        <string>$(TeamIdentifierPrefix)group.$(BASE_BUNDLE_IDENTIFIER).{{ name | lowercase }}</string>
     </array>
     {% if platform == "macos" %}
     <!-- File Access Permissions -->
