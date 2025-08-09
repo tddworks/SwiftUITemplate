@@ -83,6 +83,11 @@ public enum SourcePaths {
         public static func entitlements(extensionName: String) -> Entitlements {
             return .file(path: "\(baseExtensionPath(extensionName: extensionName))/Resources/\(extensionName).entitlements")
         }
+        
+        /// Returns the Info.plist path for the given extension.
+        public static func infoPlist(extensionName: String) -> InfoPlist {
+            return .file(path: "\(baseExtensionPath(extensionName: extensionName))/Resources/Info.plist")
+        }
     }
 
     public enum Apps {

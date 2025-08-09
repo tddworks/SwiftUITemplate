@@ -100,7 +100,7 @@ public enum TargetFactory {
             destinations: destinations,
             product: extensionType.product,
             bundleId: "\(baseBundleID).\(hostApp.lowercased()).\(name.lowercased())",
-            infoPlist: .extendingDefault(with: extensionInfoPlist(type: extensionType)),
+            infoPlist: SourcePaths.Extensions.infoPlist(extensionName: name),
             sources: [SourcePaths.Extensions.sources(extensionName: name)],
             resources: hasResources ? [SourcePaths.Extensions.resources(extensionName: name)] : nil,
             entitlements: SourcePaths.Extensions.entitlements(extensionName: name),

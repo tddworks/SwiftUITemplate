@@ -13,13 +13,13 @@
     {% if type == "widget" %}
     <key>com.apple.security.application-groups</key>
     <array>
-        <string>$(DEVELOPMENT_TEAM).group.$(PRODUCT_BUNDLE_IDENTIFIER).{{ hostApp | lowercase }}</string>
+        <string>$(TeamIdentifierPrefix)group.$(BASE_BUNDLE_IDENTIFIER).{{ hostApp | lowercase }}</string>
     </array>
     {% endif %}
     {% if type == "notification" or type == "intents" %}
     <key>com.apple.security.application-groups</key>
     <array>
-        <string>$(DEVELOPMENT_TEAM).group.$(PRODUCT_BUNDLE_IDENTIFIER).{{ hostApp | lowercase }}</string>
+        <string>$(TeamIdentifierPrefix)group.$(BASE_BUNDLE_IDENTIFIER).{{ hostApp | lowercase }}</string>
     </array>
     {% endif %}
     {% if type == "fileprovider" or type == "fileproviderui" %}
@@ -29,7 +29,7 @@
     <true/>
     <key>com.apple.security.application-groups</key>
     <array>
-        <string>$(DEVELOPMENT_TEAM).group.$(PRODUCT_BUNDLE_IDENTIFIER).{{ hostApp | lowercase }}</string>
+        <string>$(TeamIdentifierPrefix)group.$(BASE_BUNDLE_IDENTIFIER).{{ hostApp | lowercase }}</string>
     </array>
     {% endif %}
 </dict>
