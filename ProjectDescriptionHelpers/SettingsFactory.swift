@@ -37,6 +37,7 @@ public enum SettingsFactory {
             base: [
                 "SKIP_INSTALL": true,
                 "ENABLE_MODULE_VERIFIER": true,
+                "ENABLE_HARDENED_RUNTIME": true,
                 "MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS": ["gnu11", "gnu++14"]
             ]
         )
